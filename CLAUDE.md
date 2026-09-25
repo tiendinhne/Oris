@@ -1,0 +1,2 @@
+đây là project về môn kiến trúc hướng dịch vụ, điều cần đạt được là hiểu và thiết kế được hệ thống microservice với đầy đủ các ngôn ngữ sau:
+Node.js, Java Spring Boot, PHP Laravel, Python Django, Golang
