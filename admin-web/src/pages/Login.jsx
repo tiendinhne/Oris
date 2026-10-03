@@ -1,0 +1,48 @@
+import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../auth'
+
+export default function Login() {
+  const { me, signIn } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  if (me) return <Navigate to="/users" replace />
+
+  const submit = async (e) => {
+    e.preventDefault()
+    setBusy(true)
+    setError('')
+    try {
+      await signIn(email, password)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="login-page">
+      <form className="login-card" onSubmit={submit}>
+        <div className="brand dark">
+          <span className="brand-mark" aria-hidden="true">A</span>
+          <span className="brand-name">Bảng quản trị</span>
+        </div>
+        <h1>Đăng nhập</h1>
+        <div className="field">
+          <label htmlFor="email">Email</label>
+          <input id="email" type="email" autoComplete="username" required value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div className="field">
+          <label htmlFor="password">Mật khẩu</label>
+          <input id="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        {error && <p className="error-note" role="alert">{error}</p>}
+        <button type="submit" className="btn btn-primary btn-block" disabled={busy}>{busy ? 'Đang đăng nhập…' : 'Đăng nhập'}</button>
+      </form>
+    </div>
+  )
+}
