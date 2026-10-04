@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { adminApi } from '../api'
-import { Badge, ErrorNote } from '../components/ui'
+import { Badge, ErrorNote, Segmented } from '../components/ui'
 import useCursorList from '../components/useCursorList'
 import { AUDIT_ACTIONS, dateTime } from '../labels'
 
@@ -17,7 +17,7 @@ export default function AuditLogs() {
         <h1>Nhật ký thao tác</h1>
         <p className="muted">Ghi lại mọi thao tác của quản trị viên. Chỉ xem, không thể sửa hoặc xóa.</p>
       </header>
-      <div className="filters">
+      <div className="toolbar">
         <div className="field">
           <label htmlFor="a-action">Hành động</label>
           <select id="a-action" value={action} onChange={(e) => setAction(e.target.value)}>
@@ -25,12 +25,8 @@ export default function AuditLogs() {
             {Object.entries(AUDIT_ACTIONS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
         </div>
-        <div className="field">
-          <label htmlFor="a-days">Thời gian</label>
-          <select id="a-days" value={days} onChange={(e) => setDays(e.target.value)}>
-            <option value="7">7 ngày</option><option value="30">30 ngày</option><option value="">Tất cả</option>
-          </select>
-        </div>
+        <Segmented label="Thời gian" value={days} onChange={setDays}
+          options={[{ value: '7', label: '7 ngày' }, { value: '30', label: '30 ngày' }, { value: '', label: 'Tất cả' }]} />
       </div>
       <ErrorNote error={list.error} />
       <div className="table-card">

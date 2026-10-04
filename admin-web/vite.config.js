@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    watch: { usePolling: true }, // Docker trên Windows không báo sự kiện đổi file, nên phải quét định kỳ để tự nạp lại
     proxy: {
       '/api/auth': { target: AUTH_URL, changeOrigin: true, rewrite: (p) => p.replace(/^\/api\/auth/, '') },
       '/api/post': { target: POST_URL, changeOrigin: true, rewrite: (p) => p.replace(/^\/api\/post/, '') },

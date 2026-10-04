@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { adminApi } from '../api'
 import { useRefreshPending } from '../components/Layout'
-import { ErrorNote, Modal, Toast } from '../components/ui'
+import { ErrorNote, Modal, SearchBox, Segmented, Stat, Toast } from '../components/ui'
 import useCursorList from '../components/useCursorList'
 import DeletePostDialog from '../dialogs/DeletePostDialog'
 import { dateTime } from '../labels'
@@ -41,29 +41,26 @@ export default function Posts() {
         <p className="muted">Tìm bài viết, trả lời và xóa nội dung vi phạm.</p>
       </header>
 
-      <form className="filters" onSubmit={(e) => { e.preventDefault(); setSearch(q.trim()) }}>
-        <div className="field grow">
-          <label htmlFor="p-search">Tìm kiếm</label>
-          <input id="p-search" type="search" placeholder="Nội dung, hoặc @username để tìm theo tác giả"
+      <div className="stats">
+        <Stat label="Đang hiển thị" value={list.items.length} />
+        <Stat label="Có báo cáo chờ" value={list.items.filter((x) => x.pending_reports > 0).length} tone="warn" />
+        <Stat label="Riêng tư" value={list.items.filter((x) => x.visibility === 'PRIVATE').length} />
+      </div>
+
+      <div className="toolbar">
+        <form onSubmit={(e) => { e.preventDefault(); setSearch(q.trim()) }}>
+          <SearchBox id="p-search" placeholder="Nội dung hoặc @tác_giả, nhấn Enter"
             value={q} onChange={(e) => { setQ(e.target.value); if (!e.target.value) setSearch('') }} />
-        </div>
-        <div className="field">
-          <label htmlFor="p-type">Loại</label>
-          <select id="p-type" value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="">Tất cả</option><option value="POST">Bài viết</option><option value="REPLY">Trả lời</option>
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="p-days">Thời gian</label>
-          <select id="p-days" value={days} onChange={(e) => setDays(e.target.value)}>
-            <option value="">Tất cả</option><option value="1">24 giờ</option><option value="7">7 ngày</option><option value="30">30 ngày</option>
-          </select>
-        </div>
+        </form>
+        <Segmented label="Loại nội dung" value={type} onChange={setType}
+          options={[{ value: '', label: 'Tất cả' }, { value: 'POST', label: 'Bài viết' }, { value: 'REPLY', label: 'Trả lời' }]} />
+        <Segmented label="Thời gian" value={days} onChange={setDays}
+          options={[{ value: '', label: 'Mọi lúc' }, { value: '1', label: '24 giờ' }, { value: '7', label: '7 ngày' }, { value: '30', label: '30 ngày' }]} />
         <label className="check">
           <input type="checkbox" checked={reportedOnly} onChange={(e) => setReportedOnly(e.target.checked)} />
-          Chỉ nội dung có báo cáo
+          Chỉ có báo cáo
         </label>
-      </form>
+      </div>
 
       <ErrorNote error={list.error} />
       <div className="table-card">

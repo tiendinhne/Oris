@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { adminApi } from '../api'
-import { Avatar, Badge, ErrorNote, Toast } from '../components/ui'
+import { Avatar, Badge, ErrorNote, SearchBox, Segmented, Stat, Toast } from '../components/ui'
 import useCursorList from '../components/useCursorList'
 import BanDialog from '../dialogs/BanDialog'
 import UnbanDialog from '../dialogs/UnbanDialog'
@@ -15,6 +15,8 @@ export default function Users() {
   const list = useCursorList((cursor) => adminApi.users({ q: search, status, cursor }), [search, status])
   const clearToast = useCallback(() => setToast(''), [])
 
+  const count = (st) => list.items.filter((u) => u.status === st).length
+
   const done = (updated, message) => {
     list.replaceItem(updated)
     setDialog(null)
@@ -28,20 +30,21 @@ export default function Users() {
         <p className="muted">Xem, tìm kiếm và khóa hoặc mở khóa tài khoản.</p>
       </header>
 
-      <form className="filters" onSubmit={(e) => { e.preventDefault(); setSearch(q.trim()) }}>
-        <div className="field grow">
-          <label htmlFor="u-search">Tìm kiếm</label>
-          <input id="u-search" type="search" placeholder="Email hoặc username, nhấn Enter để tìm"
+      <div className="stats">
+        <Stat label="Đang hiển thị" value={list.items.length} />
+        <Stat label="Hoạt động" value={count('ACTIVE')} tone="ok" />
+        <Stat label="Bị khóa" value={count('BANNED')} tone="danger" />
+        <Stat label="Chưa xác minh" value={count('UNVERIFIED')} tone="warn" />
+      </div>
+
+      <div className="toolbar">
+        <form onSubmit={(e) => { e.preventDefault(); setSearch(q.trim()) }}>
+          <SearchBox id="u-search" placeholder="Tìm email hoặc username, nhấn Enter"
             value={q} onChange={(e) => { setQ(e.target.value); if (!e.target.value) setSearch('') }} />
-        </div>
-        <div className="field">
-          <label htmlFor="u-status">Trạng thái</label>
-          <select id="u-status" value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">Tất cả</option>
-            {Object.entries(USER_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-          </select>
-        </div>
-      </form>
+        </form>
+        <Segmented label="Lọc theo trạng thái" value={status} onChange={setStatus}
+          options={[{ value: '', label: 'Tất cả' }, ...Object.entries(USER_STATUS).map(([k, v]) => ({ value: k, label: v.label }))]} />
+      </div>
 
       <ErrorNote error={list.error} />
       <div className="table-card">

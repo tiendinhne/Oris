@@ -27,11 +27,12 @@ export default function Login() {
   return (
     <div className="login-page">
       <form className="login-card" onSubmit={submit}>
-        <div className="brand dark">
-          <span className="brand-mark" aria-hidden="true">A</span>
-          <span className="brand-name">Bảng quản trị</span>
+        <div className="brand">
+          <span className="brand-mark" aria-hidden="true">O</span>
+          <span className="brand-name">Oris <span>Admin</span></span>
         </div>
         <h1>Đăng nhập</h1>
+        <p className="lead">Dành cho quản trị viên của hệ thống.</p>
         <div className="field">
           <label htmlFor="email">Email</label>
           <input id="email" type="email" autoComplete="username" required value={email} onChange={(e) => setEmail(e.target.value)} />

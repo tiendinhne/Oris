@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { CloseIcon } from './Icons'
+import { CloseIcon, SearchIcon } from './Icons'
 
 export const Badge = ({ tone = 'muted', children }) => <span className={`badge badge-${tone}`}>{children}</span>
 
@@ -48,4 +48,33 @@ export function Toast({ message, onDone }) {
     return () => clearTimeout(t)
   }, [message, onDone])
   return message ? <div className="toast" role="status">{message}</div> : null
+}
+
+/** Nhóm nút chọn một giá trị, thay cho ô select khi chỉ có vài lựa chọn. */
+export function Segmented({ label, value, onChange, options }) {
+  return (
+    <div className="seg" role="group" aria-label={label}>
+      {options.map((o) => (
+        <button key={o.value} type="button" aria-pressed={value === o.value} className={`seg-btn ${value === o.value ? 'is-on' : ''}`} onClick={() => onChange(o.value)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export const Stat = ({ label, value, tone = 'muted' }) => (
+  <div className={`stat stat-${tone}`}>
+    <span className="stat-label">{label}</span>
+    <strong className="stat-value">{value}</strong>
+  </div>
+)
+
+export function SearchBox({ id, placeholder, value, onChange }) {
+  return (
+    <div className="search">
+      <SearchIcon />
+      <input id={id} type="search" aria-label={placeholder} placeholder={placeholder} value={value} onChange={onChange} />
+    </div>
+  )
 }
