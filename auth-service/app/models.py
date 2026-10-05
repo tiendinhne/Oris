@@ -49,6 +49,9 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(30), unique=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     display_name: Mapped[str] = mapped_column(String(50))
+    bio: Mapped[str | None] = mapped_column(String(150))             # BR-AU4-01: tiểu sử tối đa 150 ký tự
+    avatar_url: Mapped[str | None] = mapped_column(String(500))
+    link_url: Mapped[str | None] = mapped_column(String(500))
     role: Mapped[UserRole] = mapped_column(Enum(UserRole, name="user_role"), default=UserRole.USER)
     status: Mapped[UserStatus] = mapped_column(
         Enum(UserStatus, name="user_status"), default=UserStatus.UNVERIFIED, index=True
@@ -56,7 +59,10 @@ class User(Base):
     # BR-AU2-03: sai mật khẩu 5 lần thì tạm khóa đăng nhập 15 phút
     failed_login_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     login_locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    username_changed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))  # BR-AU4-03: 30 ngày/lần
+    deactivated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))       # BR-AU5: xóa hẳn sau 30 ngày
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     bans: Mapped[list["UserBan"]] = relationship(back_populates="user", foreign_keys="UserBan.user_id")
     violations: Mapped[list["Violation"]] = relationship(back_populates="user")
@@ -117,4 +123,58 @@ class RefreshToken(Base):
     token_hash: Mapped[str] = mapped_column(String(64), unique=True)  # chỉ lưu SHA-256, không lưu token gốc
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class EmailOtp(Base):
+    """Mã OTP xác minh email khi đăng ký (BR-AU1-05). Chỉ lưu bản băm."""
+
+    __tablename__ = "email_otps"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    code_hash: Mapped[str] = mapped_column(String(64))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))  # hiệu lực 10 phút
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class PasswordResetToken(Base):
+    """Liên kết đặt lại mật khẩu, dùng một lần, hiệu lực 15 phút (BR-AU3-02)."""
+
+    __tablename__ = "password_reset_tokens"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class Follow(Base):
+    """Quan hệ theo dõi; khóa chính ghép nên không theo dõi trùng (BR-AU6-02)."""
+
+    __tablename__ = "follows"
+    __table_args__ = (
+        CheckConstraint("follower_id <> following_id", name="ck_follows_not_self"),
+        Index("ix_follows_following", "following_id", "created_at"),
+    )
+
+    follower_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    following_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class Block(Base):
+    """Quan hệ chặn, có hiệu lực hai chiều khi xét hiển thị (BR-GEN-05, BR-AU8)."""
+
+    __tablename__ = "blocks"
+    __table_args__ = (
+        CheckConstraint("blocker_id <> blocked_id", name="ck_blocks_not_self"),
+        Index("ix_blocks_blocked", "blocked_id"),
+    )
+
+    blocker_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    blocked_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

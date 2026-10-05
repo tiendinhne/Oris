@@ -6,6 +6,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
       POST_DB_PASSWORD: ${POST_DB_PASSWORD}
+      NOTIFICATION_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+      FEED_DB_PASSWORD: ${FEED_DB_PASSWORD}
+      SEARCH_DB_PASSWORD: ${SEARCH_DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
@@ -48,6 +51,50 @@ services:
     volumes:
       - ./post-service:/app
     # tự chạy migration rồi mới khởi động service
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  notification-service:
+    build: ./notification-service
+    environment:
+      DATABASE_URL: postgres://notification_user:${NOTIFICATION_DB_PASSWORD}@postgres:5432/notification_db
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      TSC_WATCHFILE: DynamicPriorityPolling   # Docker trên Windows không báo sự kiện đổi file
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8003:3000"
+    volumes:
+      - ./notification-service:/app   # sửa code là tự biên dịch lại
+      - /app/node_modules             # giữ node_modules đã cài trong image
+
+  feed-service:
+    build: ./feed-service
+    environment:
+      DATABASE_URL: postgres://feed_user:${FEED_DB_PASSWORD}@postgres:5432/feed_db
+      TSC_WATCHFILE: DynamicPriorityPolling
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8004:3000"
+    volumes:
+      - ./feed-service:/app
+      - /app/node_modules
+
+  search-service:
+    build: ./search-service
+    environment:
+      SERVICE_NAME: search-service
+      DATABASE_URL: postgresql+asyncpg://search_user:${SEARCH_DB_PASSWORD}@postgres:5432/search_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8005:8000"
+    volumes:
+      - ./search-service:/app
     command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
   admin-web:

@@ -115,6 +115,21 @@ admin-web/src/
   styles.css
 ```
 
+## Model và cơ sở dữ liệu cho toàn hệ thống
+
+Đủ model cho cả 5 service theo ERD: 5 database, 31 bảng. Chi tiết từng bảng ở `docs/database.md`, sơ đồ ERD ở `docs/erd/`.
+
+| Service | Cổng | Database | Ghi chú |
+|---|---|---|---|
+| auth-service | 8001 | auth_db | Alembic |
+| post-service | 8002 | post_db | Alembic |
+| notification-service (NestJS) | 8003 | notification_db | migration TypeORM |
+| feed-service (NestJS) | 8004 | feed_db | mới có model + `/health` (`synchronize: true`) |
+| search-service (FastAPI) | 8005 | search_db | mới có model + `/health`, Alembic |
+
+`.env` cần thêm `NOTIFICATION_DB_PASSWORD`, `FEED_DB_PASSWORD`, `SEARCH_DB_PASSWORD`, `INTERNAL_API_KEY` (xem `.env.example`).
+Script tạo database chỉ chạy lần đầu, nên sau khi cập nhật phải chạy `docker compose down -v` rồi `docker compose up --build` và chạy lại seed.
+
 ## Đổi model thì làm gì
 
 Sửa `app/models.py`, rồi sinh migration mới và áp dụng:
