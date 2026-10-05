@@ -2,10 +2,15 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 
+const EMAIL_KEY = 'admin_email'
+const savedEmail = () => { try { return localStorage.getItem(EMAIL_KEY) || '' } catch { return '' } }
+const saveEmail = (v) => { try { v ? localStorage.setItem(EMAIL_KEY, v) : localStorage.removeItem(EMAIL_KEY) } catch { /* bỏ qua khi bị chặn lưu trữ */ } }
+
 export default function Login() {
   const { me, signIn } = useAuth()
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(savedEmail)
   const [password, setPassword] = useState('')
+  const [remember, setRemember] = useState(true)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -16,7 +21,8 @@ export default function Login() {
     setBusy(true)
     setError('')
     try {
-      await signIn(email, password)
+      await signIn(email, password, remember)
+      saveEmail(remember ? email : '') // chỉ nhớ email, không lưu mật khẩu
     } catch (err) {
       setError(err.message)
     } finally {
@@ -41,6 +47,10 @@ export default function Login() {
           <label htmlFor="password">Mật khẩu</label>
           <input id="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
+        <label className="check">
+          <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+          Ghi nhớ đăng nhập
+        </label>
         {error && <p className="error-note" role="alert">{error}</p>}
         <button type="submit" className="btn btn-primary btn-block" disabled={busy}>{busy ? 'Đang đăng nhập…' : 'Đăng nhập'}</button>
       </form>

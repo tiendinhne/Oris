@@ -275,3 +275,4 @@ td.empty { text-align: center; color: var(--ink-3); padding: 44px 16px; }
 .login-card .brand { padding: 0; }
 .login-card h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; }
 .login-card .lead { margin-top: -12px; color: var(--ink-3); }
+.login-card .check { padding: 0; }

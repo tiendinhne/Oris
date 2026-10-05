@@ -20,8 +20,8 @@ export function AuthProvider({ children }) {
     authApi.me().then(setMe).catch(() => tokens.clear()).finally(() => setChecking(false))
   }, [])
 
-  const signIn = async (email, password) => {
-    tokens.set(await authApi.login(email, password))
+  const signIn = async (email, password, remember = true) => {
+    tokens.set(await authApi.login(email, password), remember)
     const profile = await authApi.me()
     if (profile.role !== 'ADMIN') {
       await signOut()

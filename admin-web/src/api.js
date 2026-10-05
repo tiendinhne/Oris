@@ -3,10 +3,17 @@
 
 const KEY = 'admin_tokens'
 
+// "Ghi nhớ đăng nhập" bật: lưu ở localStorage (còn sau khi đóng trình duyệt). Tắt: sessionStorage (mất khi đóng tab).
+const read = () => sessionStorage.getItem(KEY) || localStorage.getItem(KEY)
 export const tokens = {
-  get: () => JSON.parse(localStorage.getItem(KEY) || 'null'),
-  set: (t) => localStorage.setItem(KEY, JSON.stringify(t)),
-  clear: () => localStorage.removeItem(KEY),
+  get: () => JSON.parse(read() || 'null'),
+  // remember bỏ trống = giữ nguyên nơi đang lưu (dùng khi làm mới access token)
+  set: (t, remember) => {
+    const persist = remember ?? !sessionStorage.getItem(KEY)
+    tokens.clear()
+    ;(persist ? localStorage : sessionStorage).setItem(KEY, JSON.stringify(t))
+  },
+  clear: () => { sessionStorage.removeItem(KEY); localStorage.removeItem(KEY) },
 }
 
 export class ApiError extends Error {
