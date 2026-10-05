@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tìm kiếm bài viết</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="search" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Tìm kiếm</h1>
+<form role="search" style="display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 16px; background: #FFFFFF; border: 1px solid #CBD2E1; border-radius: 14px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<label for="q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Tìm bài viết hoặc #hashtag</label>
+<input id="q" type="search" value="cà phê" placeholder="Tìm bài viết hoặc #hashtag" style="flex-grow: 1; height: 100%; border: 0; outline-offset: 4px; background: transparent; font: inherit; font-size: 16px; color: #0F172A">
+</form>
+<nav aria-label="Loại kết quả" style="display: flex; gap: 4px; padding: 4px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 14px">
+<a href="Search.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Bài viết</a>
+<a href="SearchUsers.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; color: #334155; font-weight: 500; text-decoration: none">Người dùng</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="time" style="font-size: 13px; font-weight: 500; color: #334155">Thời gian</label>
+<select id="time" style="height: 42px; padding: 0 10px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; font: inherit; color: #0F172A">
+<option>24 giờ</option><option selected="{{true}}">7 ngày</option><option>30 ngày</option><option>Tất cả</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="sort" style="font-size: 13px; font-weight: 500; color: #334155">Sắp xếp</label>
+<select id="sort" style="height: 42px; padding: 0 10px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; font: inherit; color: #0F172A">
+<option>Mới nhất</option><option>Phổ biến nhất</option>
+</select>
+</div>
+<span style="margin-left: auto; font-size: 14px; color: #64748B; padding-bottom: 10px">Kết quả cho “cà phê” trong 7 ngày</span>
+</div>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="3">
+<dc-import name="Post" item="{{p}}" hint-size="100%,240px"></dc-import>
+</sc-for>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1450}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      posts: [
+        { name: 'Lê Thu Hà', user: 'thuha.le', time: '12 phút', tone: 1,
+          text: 'Sáng nay ghé quán mới mở ở Quận 3, cà phê muối đậm vị, chỗ ngồi yên tĩnh.',
+          tag: 'caphe', likes: 48, replies: 9, reposts: 3, images: 2 },
+        { name: 'Trần Thủy Trang', user: 'thuytrang', time: '2 ngày', tone: 3,
+          text: 'Pha cà phê phin ở nhà: tráng phin bằng nước sôi trước, ủ bột 30 giây rồi mới châm đầy.',
+          tag: 'caphe', likes: 132, replies: 21, reposts: 18 },
+        { name: 'Bùi Đức Thịnh', user: 'thinh.bd', time: '5 ngày', tone: 2,
+          text: 'Một ly cà phê, một cuốn sách và buổi sáng Chủ nhật không có thông báo nào.',
+          tag: 'docsach', likes: 77, replies: 6, reposts: 2 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

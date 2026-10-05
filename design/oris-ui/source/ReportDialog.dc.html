@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Báo cáo bài viết</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="width: 760px; height: 900px; box-sizing: border-box; padding: 40px; background: #1E2235; display: flex; align-items: center; justify-content: center; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5; color: #0F172A">
+<div role="dialog" aria-labelledby="report-title" style="width: 540px; box-sizing: border-box; background: #FFFFFF; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="report-title" style="margin: 0; font-size: 20px; font-weight: 600">Báo cáo bài viết</h2>
+<span style="font-size: 14px; color: #64748B">Bài viết của @baotran_99</span>
+</div>
+<a href="Main.dc.html" aria-label="Đóng" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+</div>
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="margin-bottom: 8px; padding: 0; font-size: 14px; font-weight: 500; color: #334155">Vì sao bạn báo cáo bài viết này?</legend>
+<sc-for list="{{reasons}}" as="r" hint-placeholder-count="6">
+<label style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border: {{r.border}}; border-radius: 12px; cursor: pointer">
+<input type="radio" name="reason" checked="{{r.on}}" style="width: 18px; height: 18px; margin: 0; accent-color: #4F46E5">
+<span>{{r.label}}</span>
+</label>
+</sc-for>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between"><label for="report-desc" style="font-size: 14px; font-weight: 500; color: #334155">Mô tả (bắt buộc khi chọn Khác)</label><span style="font-size: 13px; color: #64748B">36/500</span></div>
+<textarea id="report-desc" rows="3" style="padding: 10px 14px; border: 1px solid #CBD2E1; border-radius: 10px; font: inherit; resize: vertical; color: #0F172A">Có dấu hiệu lừa đảo, xin chuyển khoản trước.</textarea>
+</div>
+<p style="margin: 0; padding: 12px 14px; border-radius: 10px; background: #F1F3F9; color: #334155; font-size: 14px">Tác giả sẽ không biết ai đã báo cáo. Bài viết vẫn hiển thị cho đến khi được quản trị viên xem xét.</p>
+<div style="display: flex; justify-content: flex-end; gap: 10px">
+<a href="Main.dc.html" style="display: flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 22px; border: 1px solid #CBD2E1; color: #0F172A; font-weight: 600; text-decoration: none; box-sizing: border-box">Hủy</a>
+<a href="Main.dc.html" style="display: flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 22px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Gửi báo cáo</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const labels = ['Spam', 'Quấy rối', 'Thù ghét', 'Bạo lực', 'Nội dung nhạy cảm', 'Khác'];
+    return {
+      reasons: labels.map((l, i) => ({
+        label: l, on: i === 5,
+        border: i === 5 ? '2px solid #4F46E5' : '1px solid #CBD2E1'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

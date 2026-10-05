@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Cài đặt thông báo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="settings" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; justify-content: center; align-items: flex-start">
+<div style="flex: 1 1 520px; max-width: 680px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 8px">
+<a href="Settings.dc.html" aria-label="Quay lại cài đặt" style="width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0F172A">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<div style="display: flex; flex-direction: column">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700">Cài đặt thông báo</h1>
+<span style="font-size: 14px; color: #64748B">Tắt một loại thì bạn sẽ không nhận thông báo mới thuộc loại đó.</span>
+</div>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0 20px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<li style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 18px 0; border-top: {{r.line}}">
+<div style="flex: 1 1 220px; display: flex; flex-direction: column">
+<span id="{{r.id}}" style="font-weight: 600">{{r.label}}</span>
+<span style="font-size: 14px; color: #64748B">{{r.desc}}</span>
+</div>
+<sc-if value="{{r.hasScope}}" hint-placeholder-val="{{true}}">
+<select aria-label="Nhận {{r.label}} từ ai" style="height: 40px; padding: 0 10px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 14px; color: #0F172A">
+<option selected="{{r.everyone}}">Từ mọi người</option>
+<option selected="{{r.followingOnly}}">Chỉ từ người tôi theo dõi</option>
+</select>
+</sc-if>
+<sc-if value="{{r.locked}}" hint-placeholder-val="{{false}}">
+<span style="font-size: 14px; font-weight: 500; color: #334155">Luôn bật</span>
+</sc-if>
+<sc-if value="{{r.toggle}}" hint-placeholder-val="{{true}}">
+<label style="position: relative; width: 48px; height: 28px; flex-shrink: 0; cursor: pointer">
+<input type="checkbox" role="switch" aria-labelledby="{{r.id}}" checked="{{r.on}}" style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer">
+<span aria-hidden="true" style="position: absolute; inset: 0; border-radius: 14px; background: {{r.track}}"></span>
+<span aria-hidden="true" style="position: absolute; top: 3px; left: {{r.knob}}; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF"></span>
+</label>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const raw = [
+      ['like', 'Lượt thích', 'Khi có người thích bài viết hoặc trả lời của bạn', true, 'everyone'],
+      ['reply', 'Trả lời', 'Khi có người trả lời bạn', true, 'everyone'],
+      ['repost', 'Đăng lại', 'Khi có người đăng lại bài viết của bạn', false, 'everyone'],
+      ['follow', 'Người theo dõi mới', 'Khi có người bắt đầu theo dõi bạn', true, null],
+      ['mention', 'Nhắc tên', 'Khi có người nhắc @tên của bạn', true, 'following'],
+      ['system', 'Thông báo hệ thống', 'Về tài khoản, bài viết bị xóa và kết quả báo cáo', true, 'locked']
+    ];
+    return {
+      rows: raw.map((r, i) => ({
+        id: 'nt-' + r[0], label: r[1], desc: r[2], on: r[3],
+        hasScope: r[4] === 'everyone' || r[4] === 'following',
+        everyone: r[4] === 'everyone', followingOnly: r[4] === 'following',
+        locked: r[4] === 'locked', toggle: r[4] !== 'locked',
+        track: r[3] ? '#4F46E5' : '#8B95A7', knob: r[3] ? '23px' : '3px',
+        line: i === 0 ? '0' : '1px solid #EEF0F6'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

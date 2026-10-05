@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hashtag #caphe</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="search" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<a href="Search.dc.html" style="align-self: flex-start; display: flex; align-items: center; gap: 6px; height: 40px; font-weight: 500; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+Tìm kiếm</a>
+<section style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; padding: 24px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 36px; font-weight: 700; letter-spacing: -0.02em; color: #4338CA">#caphe</h1>
+<span style="color: #334155">Đứng thứ 1 trong hashtag thịnh hành, 214 bài viết trong 24 giờ qua</span>
+</div>
+<div role="group" aria-label="Sắp xếp" style="display: flex; gap: 4px; padding: 4px; background: #F1F3F9; border-radius: 12px">
+<button type="button" aria-pressed="true" style="height: 38px; padding: 0 14px; border: 0; border-radius: 9px; background: #FFFFFF; color: #0F172A; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Phổ biến nhất</button>
+<button type="button" aria-pressed="false" style="height: 38px; padding: 0 14px; border: 0; border-radius: 9px; background: transparent; color: #334155; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Mới nhất</button>
+</div>
+</section>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="3">
+<dc-import name="Post" item="{{p}}" hint-size="100%,240px"></dc-import>
+</sc-for>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      posts: [
+        { name: 'Trần Thủy Trang', user: 'thuytrang', time: '5 giờ', tone: 3,
+          text: 'Pha cà phê phin ở nhà: tráng phin bằng nước sôi trước, ủ bột 30 giây rồi mới châm đầy.',
+          tag: 'caphe', likes: 432, replies: 41, reposts: 58, images: 1 },
+        { name: 'Lê Thu Hà', user: 'thuha.le', time: '12 phút', tone: 1, liked: true,
+          text: 'Sáng nay ghé quán mới mở ở Quận 3, cà phê muối đậm vị, chỗ ngồi yên tĩnh.',
+          tag: 'caphe', likes: 48, replies: 9, reposts: 3, images: 2 },
+        { name: 'Phạm Gia Huy', user: 'giahuy', time: '9 giờ', tone: 2,
+          text: 'Ai biết quán nào mở sớm gần Hồ Con Rùa không, 6 giờ sáng là mình cần cà phê rồi.',
+          tag: 'caphe', likes: 39, replies: 27, reposts: 0 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

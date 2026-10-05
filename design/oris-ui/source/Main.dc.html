@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Bảng tin – Theo dõi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="home" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h1 style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Bảng tin</h1>
+<nav aria-label="Chọn bảng tin" style="display: flex; gap: 4px; padding: 4px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 14px">
+<a href="Main.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Theo dõi</a>
+<a href="Explore.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; color: #334155; font-weight: 500; text-decoration: none">Khám phá</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 20px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<span aria-hidden="true" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: #E0E7FF; color: #4338CA; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">NA</span>
+<a href="Composer.dc.html" style="flex-grow: 1; padding: 10px 0; color: #64748B; text-decoration: none">Có gì mới, Minh Anh?</a>
+<a href="Composer.dc.html" style="display: flex; align-items: center; height: 40px; padding: 0 18px; border-radius: 20px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Đăng</a>
+</div>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="5">
+<dc-import name="Post" item="{{p}}" hint-size="100%,260px"></dc-import>
+</sc-for>
+<p style="margin: 8px 0 0; text-align: center; color: #64748B; font-size: 14px">Đang tải thêm bài viết…</p>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      posts: [
+        { name: 'Lê Thu Hà', user: 'thuha.le', time: '12 phút', tone: 1, liked: true,
+          text: 'Sáng nay ghé quán mới mở ở Quận 3, cà phê muối đậm vị, chỗ ngồi yên tĩnh. Ai cần chỗ làm việc cuối tuần thì ghé thử nhé.',
+          tag: 'caphe', likes: 48, replies: 9, reposts: 3, images: 2 },
+        { name: 'Bùi Đức Thịnh', user: 'thinh.bd', time: '35 phút', tone: 2,
+          text: 'Tháng này mình muốn đọc thêm sách phi hư cấu. Mọi người gợi ý giúp vài cuốn đọc cuối tuần với.',
+          tag: 'docsach', likes: 21, replies: 30, reposts: 1 },
+        { repostedBy: 'Hoàng Mai', name: 'Võ Ngọc Lan', user: 'lan.vo', time: '1 giờ', tone: 0,
+          text: 'Mưa chiều Sài Gòn, kẹt xe nhưng trời đẹp.', tag: 'saigonmua',
+          likes: 312, replies: 18, reposts: 27, video: true, duration: '0:42' },
+        { name: 'Hoàng Mai', user: 'maihoang_', time: '2 giờ', tone: 3, edited: true,
+          text: 'Lịch chạy bộ tuần này: thứ Ba, thứ Năm và sáng Chủ nhật ở công viên Gia Định. Ai muốn chạy chung thì trả lời ở đây.',
+          tag: 'chaybobuoisang', likes: 64, replies: 12, reposts: 5 },
+        { name: 'Đặng Tuấn Kiệt', user: 'kiet.dang', time: '3 giờ', tone: 2, repliesOff: true,
+          text: 'Vài tấm phim chụp ở Đà Lạt tuần trước. Tắt trả lời vì chỉ muốn lưu lại.',
+          tag: 'nhiepanhphim', likes: 37, replies: 0, reposts: 2, images: 1 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
