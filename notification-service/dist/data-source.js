@@ -8,7 +8,7 @@ const notification_entity_1 = require("./notification.entity");
 exports.dataSourceOptions = {
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    entities: [notification_entity_1.Notification],
+    entities: [notification_entity_1.Notification, notification_entity_1.NotificationActor, notification_entity_1.NotificationSetting],
     migrations: [__dirname + '/migrations/*.js'],
     uuidExtension: 'pgcrypto', // gen_random_uuid() có sẵn từ PostgreSQL 13, không cần cài extension
     installExtensions: false,
