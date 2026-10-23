@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hồ sơ người dùng khác</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="none" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Lê Thu Hà</h1>
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="color: #334155">@thuha.le</span>
+<span style="padding: 2px 8px; border-radius: 999px; background: #EEF0F6; color: #334155; font-size: 12px; font-weight: 500">Theo dõi bạn</span>
+</div>
+</div>
+<span aria-hidden="true" style="width: 84px; height: 84px; flex-shrink: 0; border-radius: 50%; background: #FCE8EE; color: #8E1F45; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600">LH</span>
+</div>
+<p style="margin: 0">Viết về đồ ăn và những quán cà phê nhỏ ở Sài Gòn.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px">
+<a href="FollowList.dc.html" style="color: #334155; text-decoration: none"><strong style="color: #0F172A">8.930</strong> người theo dõi</a>
+<a href="FollowList.dc.html" style="color: #334155; text-decoration: none"><strong style="color: #0F172A">402</strong> đang theo dõi</a>
+<span style="color: #334155"><strong style="color: #0F172A">517</strong> bài viết</span>
+</div>
+<div style="display: flex; gap: 10px">
+<button type="button" style="flex-grow: 1; height: 44px; border: 0; border-radius: 12px; background: #4F46E5; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Theo dõi lại</button>
+<a href="MenuOther.dc.html" aria-label="Tùy chọn khác" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 12px; border: 1px solid #CBD2E1; display: flex; align-items: center; justify-content: center; color: #0F172A">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"></circle><circle cx="12" cy="12" r="1.7"></circle><circle cx="19" cy="12" r="1.7"></circle></svg>
+</a>
+</div>
+</section>
+<nav aria-label="Nội dung hồ sơ" style="display: flex; gap: 4px; padding: 4px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 14px">
+<a href="UserProfile.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Bài viết</a>
+<a href="UserProfile.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; color: #334155; font-weight: 500; text-decoration: none">Trả lời</a>
+</nav>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="2">
+<dc-import name="Post" item="{{p}}" hint-size="100%,260px"></dc-import>
+</sc-for>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      posts: [
+        { name: 'Lê Thu Hà', user: 'thuha.le', time: '12 phút', tone: 1, liked: true,
+          text: 'Sáng nay ghé quán mới mở ở Quận 3, cà phê muối đậm vị, chỗ ngồi yên tĩnh. Ai cần chỗ làm việc cuối tuần thì ghé thử nhé.',
+          tag: 'caphe', likes: 48, replies: 9, reposts: 3, images: 2 },
+        { name: 'Lê Thu Hà', user: 'thuha.le', time: '14 giờ', tone: 1,
+          text: 'Công thức canh chua cá lóc nhà mình, nấu trong 30 phút. Lưu lại cho tuần bận rộn.',
+          tag: 'nauanmoingay', likes: 860, replies: 120, reposts: 95, images: 1 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

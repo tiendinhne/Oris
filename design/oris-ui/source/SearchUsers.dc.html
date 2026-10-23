@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tìm kiếm người dùng</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="search" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Tìm kiếm</h1>
+<form role="search" style="display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 16px; background: #FFFFFF; border: 1px solid #CBD2E1; border-radius: 14px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<label for="q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Tìm theo username</label>
+<input id="q" type="search" value="@thu" placeholder="Tìm theo username" style="flex-grow: 1; height: 100%; border: 0; outline-offset: 4px; background: transparent; font: inherit; font-size: 16px; color: #0F172A">
+</form>
+<nav aria-label="Loại kết quả" style="display: flex; gap: 4px; padding: 4px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 14px">
+<a href="Search.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; color: #334155; font-weight: 500; text-decoration: none">Bài viết</a>
+<a href="SearchUsers.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Người dùng</a>
+</nav>
+<p style="margin: 0; font-size: 14px; color: #64748B">Tài khoản có username bắt đầu bằng “thu”</p>
+<ul style="list-style: none; margin: 0; padding: 4px 20px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<sc-for list="{{people}}" as="u" hint-placeholder-count="4">
+<li style="display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: {{u.line}}">
+<span aria-hidden="true" style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 50%; background: {{u.avBg}}; color: {{u.avFg}}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600">{{u.initials}}</span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.35">
+<a href="UserProfile.dc.html" style="font-weight: 600; color: #0F172A; text-decoration: none">{{u.name}}</a>
+<span style="font-size: 14px; color: #64748B">@{{u.user}}</span>
+<span style="font-size: 13px; color: #334155">{{u.followers}} người theo dõi</span>
+</div>
+<sc-if value="{{u.following}}" hint-placeholder-val="{{false}}">
+<button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap">Đang theo dõi</button>
+</sc-if>
+<sc-if value="{{u.notFollowing}}" hint-placeholder-val="{{true}}">
+<button type="button" style="height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap">Theo dõi</button>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const tones = [['#FCE8EE', '#8E1F45'], ['#FFF0DC', '#7A4A00'], ['#E0F2FE', '#075985'], ['#E0E7FF', '#4338CA']];
+    const raw = [
+      ['Lê Thu Hà', 'thuha.le', '8.930', true],
+      ['Trần Thủy Trang', 'thuytrang', '1.120', false],
+      ['Nguyễn Văn Thuận', 'thuan.nguyen', '640', false],
+      ['Lý Thu Thảo', 'thuthao.ly', '215', true]
+    ];
+    return {
+      people: raw.map((r, i) => {
+        const w = r[0].split(/\s+/);
+        const t = tones[i % tones.length];
+        return { name: r[0], user: r[1], followers: r[2], following: r[3], notFollowing: !r[3],
+          initials: (w[0][0] + w[w.length - 1][0]).toUpperCase(), avBg: t[0], avFg: t[1],
+          line: i === 0 ? '0' : '1px solid #EEF0F6' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

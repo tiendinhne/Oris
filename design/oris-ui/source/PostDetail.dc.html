@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chi tiết bài viết</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="home" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 8px">
+<a href="Main.dc.html" aria-label="Quay lại bảng tin" style="width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0F172A">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<h1 style="margin: 0; font-size: 20px; font-weight: 600">Bài viết</h1>
+</div>
+<dc-import name="Post" item="{{post}}" hint-size="100%,560px"></dc-import>
+<a href="LikesDialog.dc.html" style="align-self: flex-start; padding: 0 4px; font-size: 14px; font-weight: 500">Xem 48 người đã thích</a>
+<form style="display: flex; gap: 12px; align-items: flex-start; padding: 16px 20px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<span aria-hidden="true" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #E0E7FF; color: #4338CA; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">NA</span>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px">
+<label for="reply-box" style="font-size: 13px; color: #64748B">Trả lời Lê Thu Hà</label>
+<textarea id="reply-box" rows="2" placeholder="Viết câu trả lời…" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #CBD2E1; border-radius: 10px; font: inherit; resize: vertical"></textarea>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-size: 13px; color: #64748B">0/500</span>
+<button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 20px; background: #4F46E5; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Trả lời</button>
+</div>
+</div>
+</form>
+<section aria-labelledby="replies-title" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px; padding: 8px 20px">
+<h2 id="replies-title" style="margin: 12px 0 4px; font-size: 16px; font-weight: 600">9 trả lời</h2>
+<sc-for list="{{replies}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; padding: 14px 0; border-top: 1px solid #EEF0F6">
+<div style="display: flex; gap: 12px">
+<span aria-hidden="true" style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: {{r.avBg}}; color: {{r.avFg}}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">{{r.initials}}</span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px">
+<a href="UserProfile.dc.html" style="font-weight: 600; color: #0F172A; text-decoration: none">{{r.name}}</a>
+<sc-if value="{{r.isAuthor}}" hint-placeholder-val="{{false}}"><span style="padding: 1px 8px; border-radius: 999px; background: #E0E7FF; color: #4338CA; font-size: 12px; font-weight: 600">Tác giả</span></sc-if>
+<span style="color: #64748B; font-size: 14px">@{{r.user}}</span>
+<span style="margin-left: auto; color: #64748B; font-size: 14px">{{r.time}}</span>
+</div>
+<p style="margin: 0">{{r.text}}</p>
+<div style="display: flex; gap: 2px; margin-left: -10px">
+<button type="button" aria-label="Thích, {{r.likes}} lượt" style="display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 10px; border: 0; background: transparent; border-radius: 18px; font: inherit; font-size: 13px; color: #334155; cursor: pointer">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+{{r.likes}}</button>
+<button type="button" style="height: 36px; padding: 0 10px; border: 0; background: transparent; border-radius: 18px; font: inherit; font-size: 13px; font-weight: 500; color: #334155; cursor: pointer">Trả lời</button>
+</div>
+<sc-if value="{{r.hasChildren}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; margin-top: 4px; padding-left: 16px; border-left: 2px solid #E4E7EF">
+<sc-for list="{{r.children}}" as="c" hint-placeholder-count="2">
+<div style="display: flex; gap: 10px; padding: 10px 0">
+<sc-if value="{{c.deleted}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0; padding: 8px 12px; border-radius: 10px; background: #F1F3F9; color: #64748B; font-size: 14px; font-style: italic">Nội dung đã bị xóa</p>
+</sc-if>
+<sc-if value="{{c.live}}" hint-placeholder-val="{{true}}">
+<span aria-hidden="true" style="width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: {{c.avBg}}; color: {{c.avFg}}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">{{c.initials}}</span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<a href="UserProfile.dc.html" style="font-weight: 600; font-size: 14px; color: #0F172A; text-decoration: none">{{c.name}}</a>
+<span style="color: #64748B; font-size: 13px">{{c.time}}</span>
+</div>
+<p style="margin: 0; font-size: 14px">{{c.text}}</p>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<a href="PostDetail.dc.html" style="align-self: flex-start; padding: 6px 0; font-size: 14px; font-weight: 500">Xem thêm 3 trả lời</a>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-for>
+</section>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const tones = [['#E0E7FF', '#4338CA'], ['#FCE8EE', '#8E1F45'], ['#E0F2FE', '#075985'], ['#FFF0DC', '#7A4A00']];
+    const person = (name, tone) => {
+      const w = name.trim().split(/\s+/);
+      const t = tones[tone % tones.length];
+      return { name: name, initials: (w[0][0] + w[w.length - 1][0]).toUpperCase(), avBg: t[0], avFg: t[1] };
+    };
+    const child = (name, tone, time, text) => Object.assign(person(name, tone), { time: time, text: text, live: true, deleted: false });
+    const replies = [
+      Object.assign(person('Lê Thu Hà', 1), { user: 'thuha.le', time: '8 phút', isAuthor: true, likes: 12,
+        text: 'Quán ở đường Võ Văn Tần nha mọi người, mở cửa từ 7 giờ sáng.',
+        hasChildren: true,
+        children: [
+          child('Bùi Đức Thịnh', 2, '6 phút', 'Có chỗ cắm sạc laptop không chị?'),
+          { deleted: true, live: false },
+          child('Lê Thu Hà', 1, '4 phút', 'Có nha, bàn dài sát cửa sổ đều có ổ cắm.')
+        ] }),
+      Object.assign(person('Hoàng Mai', 3), { user: 'maihoang_', time: '10 phút', isAuthor: false, likes: 3,
+        text: 'Cà phê muối ở đây mặn nhẹ hay đậm vậy? Mình không hợp vị mặn lắm.', hasChildren: false, children: [] }),
+      Object.assign(person('Phạm Gia Huy', 2), { user: 'giahuy', time: '11 phút', isAuthor: false, likes: 1,
+        text: 'Lưu lại, cuối tuần đi thử.', hasChildren: false, children: [] })
+    ];
+    return {
+      post: { name: 'Lê Thu Hà', user: 'thuha.le', time: '12 phút', tone: 1, liked: true,
+        text: 'Sáng nay ghé quán mới mở ở Quận 3, cà phê muối đậm vị, chỗ ngồi yên tĩnh. Ai cần chỗ làm việc cuối tuần thì ghé thử nhé.',
+        tag: 'caphe', likes: 48, replies: 9, reposts: 3, images: 2 },
+      replies: replies
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Người đã thích</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="width: 760px; height: 800px; box-sizing: border-box; padding: 40px; background: #1E2235; display: flex; align-items: center; justify-content: center; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5; color: #0F172A">
+<div role="dialog" aria-labelledby="likes-title" style="width: 480px; box-sizing: border-box; background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="likes-title" style="margin: 0; font-size: 18px; font-weight: 600">48 lượt thích</h2>
+<a href="PostDetail.dc.html" aria-label="Đóng" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #334155">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{people}}" as="u" hint-placeholder-count="7">
+<li style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: {{u.line}}">
+<span aria-hidden="true" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: {{u.avBg}}; color: {{u.avFg}}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">{{u.initials}}</span>
+<div style="flex-grow: 1; display: flex; flex-direction: column; line-height: 1.35">
+<a href="UserProfile.dc.html" style="font-weight: 600; color: #0F172A; text-decoration: none">{{u.name}}</a>
+<span style="font-size: 14px; color: #64748B">@{{u.user}}</span>
+</div>
+<sc-if value="{{u.isMe}}" hint-placeholder-val="{{false}}"><span style="font-size: 14px; color: #64748B">Bạn</span></sc-if>
+<sc-if value="{{u.following}}" hint-placeholder-val="{{false}}">
+<button type="button" style="height: 38px; padding: 0 14px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Đang theo dõi</button>
+</sc-if>
+<sc-if value="{{u.canFollow}}" hint-placeholder-val="{{true}}">
+<button type="button" style="height: 38px; padding: 0 14px; border: 0; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Theo dõi</button>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const tones = [['#E0E7FF', '#4338CA'], ['#FCE8EE', '#8E1F45'], ['#E0F2FE', '#075985'], ['#FFF0DC', '#7A4A00']];
+    const raw = [
+      ['Nguyễn Minh Anh', 'minhanh.ng', 'me'], ['Bùi Đức Thịnh', 'thinh.bd', 'following'],
+      ['Trần Thủy Trang', 'thuytrang', 'none'], ['Hoàng Mai', 'maihoang_', 'following'],
+      ['Phạm Gia Huy', 'giahuy', 'none'], ['Võ Ngọc Lan', 'lan.vo', 'following'], ['Lý Thu Thảo', 'thuthao.ly', 'none']
+    ];
+    return {
+      people: raw.map((r, i) => {
+        const w = r[0].split(/\s+/);
+        const t = tones[i % tones.length];
+        return { name: r[0], user: r[1], isMe: r[2] === 'me', following: r[2] === 'following', canFollow: r[2] === 'none',
+          initials: (w[0][0] + w[w.length - 1][0]).toUpperCase(), avBg: t[0], avFg: t[1],
+          line: i === 0 ? '0' : '1px solid #EEF0F6' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

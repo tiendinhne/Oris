@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Xác minh email</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #FFFFFF; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<div style="flex: 1 1 440px; min-height: 360px; box-sizing: border-box; padding: 48px 56px; background: #4F46E5; color: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="14.5" cy="17.5" r="10" stroke="#FFFFFF" stroke-width="3.4"></circle><circle cx="26" cy="6.5" r="3.4" fill="#F3B562"></circle></svg>
+<span style="font-size: 26px; font-weight: 700; letter-spacing: -0.03em">oris</span>
+</div>
+<svg viewBox="0 0 400 400" style="width: 100%; max-width: 380px; align-self: center" aria-hidden="true"><circle cx="185" cy="220" r="138" fill="none" stroke="#FFFFFF" stroke-width="36"></circle><circle cx="338" cy="66" r="32" fill="#F3B562"></circle></svg>
+<p style="margin: 0; max-width: 380px; font-size: 22px; font-weight: 600; line-height: 1.35">Nói điều bạn nghĩ. Nghe điều mọi người nói.</p>
+</div>
+<div style="flex: 1 1 480px; box-sizing: border-box; padding: 48px 24px; display: flex; align-items: center; justify-content: center">
+<form style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.02em">Xác minh email</h1>
+<p style="margin: 0; color: #334155">Nhập mã 6 số vừa gửi tới <strong style="color: #0F172A">minhanh@example.com</strong>. Mã có hiệu lực trong 10 phút.</p>
+</div>
+<fieldset style="border: 0; margin: 0; padding: 0">
+<legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mã xác minh</legend>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{digits}}" as="d" hint-placeholder-count="6">
+<input type="text" inputmode="numeric" maxlength="1" aria-label="Chữ số {{d.n}}" value="{{d.v}}" style="height: 60px; min-width: 0; box-sizing: border-box; border: 1px solid {{d.border}}; border-radius: 12px; text-align: center; font: inherit; font-size: 24px; font-weight: 600; color: #0F172A">
+</sc-for>
+</div>
+</fieldset>
+<a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; height: 50px; border-radius: 25px; background: #4F46E5; color: #FFFFFF; font-weight: 600; font-size: 16px; text-decoration: none">Xác minh</a>
+<div style="display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center">
+<span style="color: #334155">Chưa nhận được mã?</span>
+<button type="button" style="height: 40px; padding: 0 12px; border: 0; background: transparent; color: #4F46E5; font: inherit; font-weight: 600; cursor: pointer">Gửi lại mã</button>
+<span style="font-size: 13px; color: #64748B">Gửi lại mã mới thì mã cũ sẽ hết hiệu lực.</span>
+</div>
+</form>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const typed = ['4', '8', '2', '', '', ''];
+    return {
+      digits: typed.map((v, i) => ({ n: i + 1, v: v, border: i === 3 ? '#4F46E5' : '#CBD2E1' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Đăng nhập</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #FFFFFF; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<div style="flex: 1 1 440px; min-height: 360px; box-sizing: border-box; padding: 48px 56px; background: #4F46E5; color: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="14.5" cy="17.5" r="10" stroke="#FFFFFF" stroke-width="3.4"></circle><circle cx="26" cy="6.5" r="3.4" fill="#F3B562"></circle></svg>
+<span style="font-size: 26px; font-weight: 700; letter-spacing: -0.03em">oris</span>
+</div>
+<svg viewBox="0 0 400 400" style="width: 100%; max-width: 380px; align-self: center" aria-hidden="true"><circle cx="185" cy="220" r="138" fill="none" stroke="#FFFFFF" stroke-width="36"></circle><circle cx="338" cy="66" r="32" fill="#F3B562"></circle></svg>
+<p style="margin: 0; max-width: 380px; font-size: 22px; font-weight: 600; line-height: 1.35">Nói điều bạn nghĩ. Nghe điều mọi người nói.</p>
+</div>
+<div style="flex: 1 1 480px; box-sizing: border-box; padding: 48px 24px; display: flex; align-items: center; justify-content: center">
+<form style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 18px">
+<h1 style="margin: 0 0 6px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em">Đăng nhập</h1>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="email" style="font-size: 14px; font-weight: 500; color: #334155">Email</label>
+<input id="email" type="email" autocomplete="username" value="minhanh@example.com" style="height: 48px; padding: 0 14px; border: 1px solid #CBD2E1; border-radius: 10px; font: inherit; color: #0F172A">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<label for="password" style="font-size: 14px; font-weight: 500; color: #334155">Mật khẩu</label>
+<a href="ForgotPassword.dc.html" style="font-size: 14px; font-weight: 500">Quên mật khẩu?</a>
+</div>
+<input id="password" type="password" autocomplete="current-password" value="sai-mat-khau" aria-describedby="login-error" aria-invalid="true" style="height: 48px; padding: 0 14px; border: 1px solid #B91C1C; border-radius: 10px; font: inherit; color: #0F172A">
+</div>
+<p id="login-error" role="alert" style="margin: 0; padding: 10px 14px; border-radius: 10px; background: #FEF2F2; color: #B91C1C; font-size: 14px">Email hoặc mật khẩu không đúng.</p>
+<a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; height: 50px; border-radius: 25px; background: #4F46E5; color: #FFFFFF; font-weight: 600; font-size: 16px; text-decoration: none">Đăng nhập</a>
+<p style="margin: 4px 0 0; text-align: center; color: #334155">Chưa có tài khoản? <a href="Register.dc.html" style="font-weight: 600">Tạo tài khoản</a></p>
+<p style="margin: 0; text-align: center; font-size: 14px"><a href="Explore.dc.html">Xem bài viết mà không cần đăng nhập</a></p>
+</form>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

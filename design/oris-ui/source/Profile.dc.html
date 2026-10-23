@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hồ sơ của tôi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="profile" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Nguyễn Minh Anh</h1>
+<span style="color: #334155">@minhanh.ng</span>
+</div>
+<span aria-hidden="true" style="width: 84px; height: 84px; flex-shrink: 0; border-radius: 50%; background: #E0E7FF; color: #4338CA; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600">NA</span>
+</div>
+<p style="margin: 0">Thiết kế giao diện ở Sài Gòn. Thích cà phê và chạy bộ buổi sáng.</p>
+<a href="https://example.com" style="align-self: flex-start; display: flex; align-items: center; gap: 6px; font-weight: 500">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+[liên kết cá nhân]</a>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px">
+<a href="FollowList.dc.html" style="color: #334155; text-decoration: none"><strong style="color: #0F172A">1.204</strong> người theo dõi</a>
+<a href="FollowList.dc.html" style="color: #334155; text-decoration: none"><strong style="color: #0F172A">312</strong> đang theo dõi</a>
+<span style="color: #334155"><strong style="color: #0F172A">86</strong> bài viết</span>
+</div>
+<a href="EditProfile.dc.html" style="display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 12px; border: 1px solid #CBD2E1; color: #0F172A; font-weight: 600; text-decoration: none; box-sizing: border-box">Chỉnh sửa hồ sơ</a>
+</section>
+<nav aria-label="Nội dung hồ sơ" style="display: flex; gap: 4px; padding: 4px; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 14px">
+<a href="Profile.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; background: #4F46E5; color: #FFFFFF; font-weight: 600; text-decoration: none">Bài viết</a>
+<a href="Profile.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 10px; color: #334155; font-weight: 500; text-decoration: none">Trả lời</a>
+</nav>
+<sc-for list="{{posts}}" as="p" hint-placeholder-count="3">
+<dc-import name="Post" item="{{p}}" hint-size="100%,240px"></dc-import>
+</sc-for>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      posts: [
+        { name: 'Nguyễn Minh Anh', user: 'minhanh.ng', time: '20 phút', tone: 0, private: true, repliesOff: true,
+          text: 'Ghi chú: đặt vé xe về quê ngày 28, nhớ mang sạc dự phòng.', likes: 0, replies: 0, reposts: 0 },
+        { name: 'Nguyễn Minh Anh', user: 'minhanh.ng', time: '1 ngày', tone: 0,
+          text: 'Sáng nay chạy được 8 km, kỷ lục mới của mình. Trời mát nên chạy rất dễ chịu.',
+          tag: 'chaybobuoisang', likes: 96, replies: 14, reposts: 4, images: 2 },
+        { repostedBy: 'Bạn', name: 'Bùi Đức Thịnh', user: 'thinh.bd', time: '2 ngày', tone: 2,
+          text: 'Đọc xong một cuốn về thói quen trong 3 ngày. Ý mình thích nhất: thay đổi môi trường dễ hơn thay đổi ý chí.',
+          tag: 'docsach', likes: 640, replies: 58, reposts: 74 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Thông báo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:#4F46E5}a:hover{color:#4338CA}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; width: 100%; min-height: 900px; background: #F4F5FA; color: #0F172A; font-family: 'Be Vietnam Pro', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+<dc-import name="Nav" active="notifications" hint-size="248px,900px"></dc-import>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 24px 64px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 32px">
+<div style="flex: 1 1 520px; max-width: 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+<div style="flex-grow: 1; display: flex; flex-direction: column">
+<h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Thông báo</h1>
+<span style="font-size: 14px; color: #64748B">3 thông báo chưa đọc</span>
+</div>
+<button type="button" style="height: 40px; padding: 0 14px; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; color: #0F172A; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Đánh dấu tất cả đã đọc</button>
+<a href="NotificationSettings.dc.html" aria-label="Cài đặt thông báo" style="width: 40px; height: 40px; box-sizing: border-box; border: 1px solid #CBD2E1; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #0F172A">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>
+</a>
+</div>
+<div role="group" aria-label="Lọc theo loại" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+<button type="button" aria-pressed="{{f.pressed}}" style="height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">{{f.label}}</button>
+</sc-for>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; background: #FFFFFF; border: 1px solid #E4E7EF; border-radius: 16px; overflow: hidden">
+<sc-for list="{{items}}" as="n" hint-placeholder-count="7">
+<li style="border-top: {{n.line}}; background: {{n.bg}}">
+<a href="{{n.href}}" style="display: flex; gap: 14px; padding: 16px 20px; text-decoration: none; color: #0F172A">
+<span aria-hidden="true" style="position: relative; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: {{n.iconBg}}; color: {{n.iconFg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{n.isLike}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg></sc-if>
+<sc-if value="{{n.isReply}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9.5L5 20v-4H4z"></path></svg></sc-if>
+<sc-if value="{{n.isRepost}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13l-3-3"></path><path d="M20 15H7l3 3"></path></svg></sc-if>
+<sc-if value="{{n.isFollow}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"></circle><path d="M3 21c0-4 3-6 7-6"></path><path d="M18 14v6M15 17h6"></path></svg></sc-if>
+<sc-if value="{{n.isMention}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-4 7.5"></path></svg></sc-if>
+<sc-if value="{{n.isSystem}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg></sc-if>
+</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<span><strong style="font-weight: 600">{{n.actor}}</strong> {{n.action}}</span>
+<sc-if value="{{n.hasSnippet}}" hint-placeholder-val="{{true}}"><span style="color: #334155; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{n.snippet}}</span></sc-if>
+<span style="font-size: 13px; color: #64748B">{{n.time}}</span>
+</span>
+<sc-if value="{{n.unread}}" hint-placeholder-val="{{false}}"><span aria-label="Chưa đọc" style="width: 10px; height: 10px; margin-top: 6px; flex-shrink: 0; border-radius: 50%; background: #4F46E5"></span></sc-if>
+</a>
+</li>
+</sc-for>
+</ul>
+</div>
+<dc-import name="Trending" hint-size="300px,520px"></dc-import>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const filters = ['Tất cả', 'Trả lời', 'Nhắc tên', 'Theo dõi', 'Lượt thích', 'Đăng lại'].map((label, i) => ({
+      label: label, pressed: i === 0 ? 'true' : 'false',
+      bg: i === 0 ? '#4F46E5' : '#FFFFFF', fg: i === 0 ? '#FFFFFF' : '#334155', border: i === 0 ? '#4F46E5' : '#CBD2E1'
+    }));
+    const look = {
+      like: ['#FCE8EE', '#B0234F'], reply: ['#E0E7FF', '#4338CA'], repost: ['#E0E7FF', '#4338CA'],
+      follow: ['#E0F2FE', '#075985'], mention: ['#E0F2FE', '#075985'], system: ['#FFF0DC', '#7A4A00']
+    };
+    const raw = [
+      ['like', 'Lê Thu Hà và 12 người khác', 'đã thích bài viết của bạn', 'Sáng nay chạy được 8 km, kỷ lục mới của mình…', '5 phút', true, 'PostDetail.dc.html'],
+      ['reply', 'Bùi Đức Thịnh', 'đã trả lời bạn', 'Hôm nào cho mình chạy chung với nhé!', '18 phút', true, 'PostDetail.dc.html'],
+      ['follow', 'Hoàng Mai và 3 người khác', 'đã theo dõi bạn', '', '1 giờ', true, 'FollowList.dc.html'],
+      ['mention', 'Phạm Gia Huy', 'đã nhắc đến bạn trong một bài viết', '@minhanh.ng chỉ mình chỗ mua giày chạy với', '3 giờ', false, 'PostDetail.dc.html'],
+      ['repost', 'Võ Ngọc Lan', 'đã đăng lại bài viết của bạn', 'Sáng nay chạy được 8 km, kỷ lục mới của mình…', '5 giờ', false, 'PostDetail.dc.html'],
+      ['system', 'Oris', 'đã xóa một bài viết của bạn vì vi phạm tiêu chuẩn cộng đồng', 'Lý do: Spam', '2 ngày', false, 'Notifications.dc.html'],
+      ['like', 'Đặng Tuấn Kiệt', 'đã thích trả lời của bạn', 'Quán này mình đi rồi, rất đáng thử.', '3 ngày', false, 'PostDetail.dc.html']
+    ];
+    return {
+      filters: filters,
+      items: raw.map((r, i) => ({
+        actor: r[1], action: r[2], snippet: r[3], hasSnippet: !!r[3], time: r[4], unread: r[5], href: r[6],
+        bg: r[5] ? '#F5F6FF' : '#FFFFFF', line: i === 0 ? '0' : '1px solid #EEF0F6',
+        iconBg: look[r[0]][0], iconFg: look[r[0]][1],
+        isLike: r[0] === 'like', isReply: r[0] === 'reply', isRepost: r[0] === 'repost',
+        isFollow: r[0] === 'follow', isMention: r[0] === 'mention', isSystem: r[0] === 'system'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
