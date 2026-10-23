@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.notify import publish_event
 from app.database import get_db
 from app.errors import api_error
 from app.models import RefreshToken, User, UserBan, UserStatus
@@ -78,6 +79,8 @@ async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
                             ends_at=ban.ends_at.isoformat() if ban.ends_at else None)
     if user.status == UserStatus.DEACTIVATED:
         user.status = UserStatus.ACTIVE  # BR-AU5-03: đăng nhập lại trong 30 ngày thì khôi phục
+        publish_event("UserIndexed", user_id=str(user.id), username=user.username, display_name=user.display_name,
+                      avatar_url=user.avatar_url, status="ACTIVE")
 
     tokens = await _issue_tokens(db, user)
     await db.commit()

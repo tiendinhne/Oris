@@ -85,3 +85,77 @@ class DismissRequest(BaseModel):
         if not v:
             raise ValueError("Bắt buộc nhập lý do")
         return v
+
+
+# ---------- API người dùng thường ----------
+from app.models import MediaType, ReplyPermission, Visibility  # noqa: E402
+
+
+class MediaIn(BaseModel):
+    type: MediaType
+    url: str = Field(max_length=500)
+
+
+class CreatePostRequest(BaseModel):
+    content: str | None = Field(None, max_length=500)  # BR-PO1-01
+    media: list[MediaIn] = Field(default_factory=list, max_length=4)
+    visibility: Visibility = Visibility.PUBLIC
+    reply_permission: ReplyPermission = ReplyPermission.EVERYONE
+
+    @field_validator("content")
+    @classmethod
+    def _strip(cls, v):
+        return (v or "").strip() or None
+
+
+class UpdatePostRequest(BaseModel):
+    content: str | None = Field(None, max_length=500)
+    visibility: Visibility | None = None
+    reply_permission: ReplyPermission | None = None
+
+
+class ReportRequest(BaseModel):
+    reason: ReportReason
+    description: str | None = Field(None, max_length=500)
+
+
+class UserCard(BaseModel):
+    id: uuid.UUID
+    username: str | None
+    display_name: str | None
+    avatar_url: str | None = None
+
+
+class MediaOut(BaseModel):
+    type: str
+    url: str
+
+
+class PostOut(BaseModel):
+    id: uuid.UUID
+    author: UserCard
+    parent_id: uuid.UUID | None
+    root_id: uuid.UUID | None
+    content: str | None
+    visibility: str
+    reply_permission: str
+    media: list[MediaOut]
+    hashtags: list[str]
+    like_count: int
+    reply_count: int
+    repost_count: int
+    liked_by_me: bool
+    reposted_by_me: bool
+    is_mine: bool
+    created_at: datetime
+    edited_at: datetime | None
+
+
+class PostListPage(BaseModel):
+    items: list[PostOut]
+    next_cursor: str | None
+
+
+class UserListPage(BaseModel):
+    items: list[UserCard]
+    next_cursor: str | None

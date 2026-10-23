@@ -38,3 +38,19 @@ async def get_user(admin: CurrentUser, user_id: uuid.UUID) -> dict:
 async def moderation_event(admin: CurrentUser, **payload) -> dict:
     body = {k: (str(v) if isinstance(v, uuid.UUID) else v) for k, v in payload.items()}
     return await _call("POST", "/admin/moderation-events", admin, body)
+
+
+# ---------- Cho API người dùng thường (chuyển tiếp token của chính họ) ----------
+
+async def lookup_cards(user: CurrentUser, ids=(), usernames=()) -> dict[uuid.UUID, dict]:
+    """Trả về {user_id: {"id", "username", "display_name", "avatar_url", "bio"}}."""
+    ids, usernames = list({str(i) for i in ids}), list(usernames)
+    if not ids and not usernames:
+        return {}
+    data = await _call("POST", "/users/lookup", user, {"ids": ids, "usernames": usernames})
+    return {uuid.UUID(u["id"]): u for u in data}
+
+
+async def relations(user: CurrentUser) -> dict[str, set[uuid.UUID]]:
+    data = await _call("GET", "/users/me/relations", user)
+    return {k: {uuid.UUID(i) for i in v} for k, v in data.items()}

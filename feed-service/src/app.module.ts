@@ -1,18 +1,7 @@
-import { Controller, Get, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { DataSource } from 'typeorm'
 import { ENTITIES } from './entities'
-
-@Controller()
-class HealthController {
-  constructor(private readonly db: DataSource) {}
-
-  @Get('health')
-  async health() {
-    await this.db.query('SELECT 1')
-    return { service: 'feed-service', database: 'ok' }
-  }
-}
+import { FeedController } from './feed.controller'
 
 @Module({
   imports: [
@@ -24,6 +13,6 @@ class HealthController {
       synchronize: true,
     }),
   ],
-  controllers: [HealthController],
+  controllers: [FeedController],
 })
 export class AppModule {}

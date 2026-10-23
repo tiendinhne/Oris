@@ -1,11 +1,14 @@
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
+from fastapi.exceptions import RequestValidationError
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.database import engine, get_db
+from app.errors import validation_error_handler
+from app.routers import events, search
 
 
 @asynccontextmanager
@@ -15,6 +18,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Search & Trending Service", lifespan=lifespan)
+app.add_exception_handler(RequestValidationError, validation_error_handler)
+app.include_router(search.router)
+app.include_router(events.router)
 
 
 @app.get("/health", tags=["system"])

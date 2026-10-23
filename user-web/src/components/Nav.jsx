@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { me } from '../data'
+import { useAuth } from '../auth'
 import Avatar from './Avatar'
 import { Icon, Logo } from './Icons'
 
@@ -11,8 +11,9 @@ const items = [
   ['settings', '/settings', 'settings', 'Cài đặt'],
 ]
 
-// Chế độ thành viên. Mục chưa có màn hình trỏ về route dự kiến (tạm rơi về trang chủ).
+// Mục chưa có màn hình trỏ về route dự kiến (tạm rơi về trang chủ).
 export default function Nav({ active = 'home' }) {
+  const { me, unread, signOut } = useAuth()
   return (
     <nav className="nav" aria-label="Điều hướng chính">
       <Link to="/" className="nav-logo" aria-label="Oris, về trang chủ">
@@ -24,20 +25,20 @@ export default function Nav({ active = 'home' }) {
           <Link key={key} to={to} className="nav-item" aria-current={active === key ? 'page' : undefined}>
             <Icon name={icon} size={22} />
             <span className="grow">{label}</span>
-            {key === 'notifications' && me.unread > 0 && (
-              <span className="badge" aria-label={`${me.unread} chưa đọc`}>{me.unread}</span>
+            {key === 'notifications' && unread > 0 && (
+              <span className="badge" aria-label={`${unread} chưa đọc`}>{unread}</span>
             )}
           </Link>
         ))}
       </div>
       <Link to="/" className="btn btn-primary btn-lg"><Icon name="plus" size={20} strokeWidth={2} />Đăng bài</Link>
       <div className="nav-account">
-        <Avatar name={me.name} size={36} />
+        <Avatar name={me.display_name} size={36} />
         <span className="grow nav-account-name">
-          <strong>{me.name}</strong>
-          <span>@{me.user}</span>
+          <strong>{me.display_name}</strong>
+          <span>@{me.username}</span>
         </span>
-        <Link to="/login" className="icon-btn" aria-label="Đăng xuất"><Icon name="logout" /></Link>
+        <button type="button" className="icon-btn" aria-label="Đăng xuất" onClick={signOut}><Icon name="logout" /></button>
       </div>
     </nav>
   )

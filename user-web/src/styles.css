@@ -168,3 +168,4 @@ button { cursor: pointer; }
   .shell-main { padding: 16px; }
   .auth-brand { padding: 32px 24px; }
 }
+.linklike { border: 0; background: none; padding: 0; color: var(--primary); cursor: pointer; font: inherit; }

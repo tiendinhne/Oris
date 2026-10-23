@@ -10,6 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const data_source_1 = require("./data-source");
+const events_controller_1 = require("./events.controller");
 const notification_entity_1 = require("./notification.entity");
 const notifications_controller_1 = require("./notifications.controller");
 let AppModule = class AppModule {
@@ -20,9 +21,9 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             // Khởi động là tự chạy các migration chưa áp dụng (giống `alembic upgrade head` bên Python)
             typeorm_1.TypeOrmModule.forRoot({ ...data_source_1.dataSourceOptions, migrationsRun: true }),
-            typeorm_1.TypeOrmModule.forFeature([notification_entity_1.Notification]),
+            typeorm_1.TypeOrmModule.forFeature([notification_entity_1.Notification, notification_entity_1.NotificationActor, notification_entity_1.NotificationSetting]),
         ],
-        controllers: [notifications_controller_1.NotificationsController],
+        controllers: [notifications_controller_1.NotificationsController, events_controller_1.EventsController],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

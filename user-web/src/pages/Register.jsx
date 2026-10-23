@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { authApi } from '../api'
 import AuthSplit from '../components/AuthSplit'
 import { Icon } from '../components/Icons'
 
@@ -12,13 +13,29 @@ export default function Register() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [tried, setTried] = useState(false)
-  const userBad = tried && !USERNAME_RE.test(username)
+  const [error, setError] = useState('')
+  const [fields, setFields] = useState({})
+  const [busy, setBusy] = useState(false)
+  const userBad = (tried && !USERNAME_RE.test(username)) || !!fields.username
   const passBad = tried && !passwordOk(password)
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault()
     setTried(true)
-    if (USERNAME_RE.test(username) && passwordOk(password) && e.target.checkValidity()) nav('/')
+    setError('')
+    setFields({})
+    if (!(USERNAME_RE.test(username) && passwordOk(password) && e.target.checkValidity())) return
+    const email = new FormData(e.target).get('email').trim()
+    setBusy(true)
+    try {
+      await authApi.register({ email, username, display_name: username, password })
+      nav(`/verify?email=${encodeURIComponent(email)}`)
+    } catch (err) {
+      setFields(err.detail.fields || {})
+      setError(err.detail.fields ? '' : err.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -26,17 +43,18 @@ export default function Register() {
       <form onSubmit={submit}>
         <div className="field">
           <label htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" required autoComplete="email" />
+          <input id="email" name="email" type="email" required autoComplete="email" aria-invalid={!!fields.email} />
+          {fields.email && <span className="hint bad">{fields.email}</span>}
         </div>
         <div className="field">
           <label htmlFor="username">Username</label>
           <div className={'input-prefix' + (userBad ? ' invalid' : '')}>
             <span aria-hidden="true">@</span>
-            <input id="username" value={username} onChange={(e) => setUsername(e.target.value)}
+            <input id="username" value={username} onChange={(e) => setUsername(e.target.value.toLowerCase())}
               autoComplete="username" aria-describedby="username-hint" />
           </div>
           <span id="username-hint" className={'hint' + (userBad ? ' bad' : '')}>
-            3–30 ký tự gồm chữ thường, số, dấu chấm và gạch dưới; không bắt đầu hoặc kết thúc bằng dấu chấm.
+            {fields.username || '3–30 ký tự gồm chữ thường, số, dấu chấm và gạch dưới; không bắt đầu hoặc kết thúc bằng dấu chấm.'}
           </span>
         </div>
         <div className="field">
@@ -48,7 +66,8 @@ export default function Register() {
             Ít nhất 8 ký tự, có cả chữ và số
           </span>
         </div>
-        <button type="submit" className="btn btn-primary btn-xl">Tạo tài khoản</button>
+        {error && <p role="alert" className="alert-error">{error}</p>}
+        <button type="submit" className="btn btn-primary btn-xl" disabled={busy}>{busy ? 'Đang tạo…' : 'Tạo tài khoản'}</button>
         <p className="auth-alt">Đã có tài khoản? <Link to="/login"><b>Đăng nhập</b></Link></p>
       </form>
     </AuthSplit>

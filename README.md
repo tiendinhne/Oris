@@ -1,9 +1,9 @@
 # Admin project – Bước 2 → 6: backend quản trị và giao diện React
 
-Gồm PostgreSQL (2 database riêng: `auth_db`, `post_db`), 2 service FastAPI: Auth (cổng 8001), Post (cổng 8002),
-và giao diện quản trị React (cổng 5173).
+Gồm PostgreSQL (mỗi service một database), 5 service (Auth 8001, Post 8002, Notification 8003, Feed 8004, Search 8005)
+và hai giao diện React: quản trị (5173), người dùng (5174).
 
-**Mở trang quản trị:** http://localhost:5173 → đăng nhập `admin@example.com` / `Admin@1234` (nhớ chạy seed trước).
+**Mở trang quản trị:** http://localhost:5173 → đăng nhập `admin@example.com` / `Admin@1234` (admin tự được tạo khi Auth khởi động).
 
 ## Chạy
 
@@ -12,21 +12,15 @@ cp .env.example .env          # rồi đổi mật khẩu trong .env
 docker compose up --build
 ```
 
-## Tạo dữ liệu mẫu (bước 3)
+## Dữ liệu và tài khoản admin
 
-Bảng được tạo tự động khi service khởi động (`alembic upgrade head`). Sau đó chạy:
+Bảng được tạo tự động khi service khởi động (`alembic upgrade head`). Database bắt đầu **trống**; chỉ có một tài khoản admin
+`admin@example.com` / `Admin@1234`, tự tạo khi Auth khởi động (chạy lại không tạo trùng).
+Đổi bằng biến `ADMIN_EMAIL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD` trong `docker-compose.yml`.
 
-```bash
-docker compose exec auth-service python -m app.seed
-docker compose exec post-service python -m app.seed
-```
-
-- Admin: `admin@example.com` / `Admin@1234`
-- Người dùng mẫu: mật khẩu `Demo@1234` (ví dụ `minhanh@example.com`)
-- Chạy lại seed khi đã có dữ liệu sẽ tự bỏ qua. Muốn làm lại từ đầu: `docker compose down -v`.
-
-Dữ liệu mẫu khớp với bản thiết kế giao diện admin: 3 nhóm báo cáo đang chờ (12, 8, 5 báo cáo),
-`baotran_99` đã vi phạm 3 lần và đang bị khóa 7 ngày, `kiet.dang` có 2 lần vi phạm, v.v.
+Người dùng thường tự đăng ký qua `POST /auth/register`. Email chưa gửi thật nên mã OTP và liên kết đặt lại mật khẩu
+nằm trong log: `docker compose logs auth-service` (tìm dòng `[EMAIL -> ...]`).
+Dữ liệu nằm trong volume `pgdata`, chỉ mất khi chạy `docker compose down -v`.
 
 ## Đăng nhập và phân quyền admin (bước 4)
 
@@ -43,8 +37,7 @@ Thử trên Swagger:
 2. Chép `access_token`, bấm nút **Authorize** ở góc trên, dán token vào.
 3. Gọi `GET /admin/ping`. Dán cùng token vào http://localhost:8002/docs để thử bên Post.
 
-Các tình huống nên thử khi demo: đăng nhập `minhanh@example.com` rồi gọi `/admin/ping` (403),
-đăng nhập `bao.tq@example.com` (bị khóa, trả lý do và thời hạn), sai mật khẩu 5 lần (tạm khóa 15 phút).
+Các tình huống nên thử khi demo: đăng ký một người dùng rồi gọi `/admin/ping` (403), khóa người đó bằng tài khoản admin và đăng nhập lại (trả lý do và thời hạn), sai mật khẩu 5 lần (tạm khóa 15 phút).
 
 Lỗi luôn có dạng `{"detail": {"code": "...", "message": "..."}}`, frontend dựa vào `code` để xử lý.
 
@@ -83,8 +76,26 @@ rồi gọi `POST /admin/moderation-events` bên Auth (chuyển tiếp token c�
 Auth lỗi hoặc không chạy thì toàn bộ thay đổi bên Post bị hủy, trả lỗi 502, dữ liệu hai bên không lệch nhau.
 Thông báo SYSTEM, email và sự kiện hiện chỉ ghi ra log (`app/notify.py`), sẽ thay khi có Notification Service và RabbitMQ.
 
-**Kịch bản demo gợi ý:** xóa một bài của `kiet.dang` (đang có 2 vi phạm) → API trả `author_auto_banned: true`
-→ trang người dùng thấy `kiet.dang` bị khóa 7 ngày → nhật ký có đủ `DELETE_POST` và `BAN_USER`.
+**Kịch bản demo gợi ý:** một người dùng có 3 bài bị admin xóa trong 90 ngày → lần xóa thứ 3 API trả `author_auto_banned: true`
+→ trang người dùng thấy họ bị khóa 7 ngày → nhật ký có đủ `DELETE_POST` và `BAN_USER`.
+
+## API người dùng
+
+Cần access token (trừ đăng ký, đăng nhập, xác minh, quên mật khẩu). Xem chi tiết và thử tại `/docs` của Auth (8001), Post (8002), Search (8005).
+
+| Service | API |
+|---|---|
+| Auth 8001 | `POST /auth/register`, `verify-email`, `resend-otp`, `forgot-password`, `reset-password` · `GET/PATCH /users/{username}`, `/users/me`, `POST /users/me/password`, `DELETE /users/me` (tắt tài khoản) · `POST/DELETE /users/{username}/follow`, `/block` · `GET /users/{username}/followers`, `/following`, `/users/me/blocks` |
+| Post 8002 | `POST /posts`, `GET/PATCH/DELETE /posts/{id}` · `POST/GET /posts/{id}/replies` · `POST/DELETE /posts/{id}/like`, `/repost` · `GET /posts/{id}/likes` · `POST /posts/{id}/report` · `GET /posts/by-user/{username}`, `/hashtags/{name}/posts` |
+| Notification 8003 | `GET /notifications`, `/unread-count`, `/settings` · `POST /notifications/read-all`, `/{id}/read` · `PUT /notifications/settings/{type}` |
+| Feed 8004 | `GET /feed`, `/feed/explore` · `POST/DELETE /feed/hide/{postId}`, `/feed/mute/{userId}` |
+| Search 8005 | `GET /search/users`, `/search/posts`, `/trending/hashtags` |
+
+**Các service phối hợp bằng sự kiện:** Auth và Post gọi `POST /internal/events` (khóa `X-Internal-Key` = `INTERNAL_API_KEY`) của Notification, Feed, Search
+(`app/notify.py` → `publish_event`). Gửi lỗi chỉ ghi log, không làm hỏng thao tác chính. Feed và Search lấy nội dung bài từ Post qua `POST /posts/batch`.
+
+**Giao diện người dùng** (`user-web/`, http://localhost:5174): đăng ký, xác minh email, đăng nhập, bảng tin Theo dõi / Khám phá, đăng bài, chi tiết bài, trả lời, thích, đăng lại.
+Chưa có màn hình hồ sơ, tìm kiếm, thông báo.
 
 ## Giao diện quản trị (bước 6)
 
@@ -124,11 +135,11 @@ admin-web/src/
 | auth-service | 8001 | auth_db | Alembic |
 | post-service | 8002 | post_db | Alembic |
 | notification-service (NestJS) | 8003 | notification_db | migration TypeORM |
-| feed-service (NestJS) | 8004 | feed_db | mới có model + `/health` (`synchronize: true`) |
-| search-service (FastAPI) | 8005 | search_db | mới có model + `/health`, Alembic |
+| feed-service (NestJS) | 8004 | feed_db | bảng tin, khám phá, ẩn bài (`synchronize: true`) |
+| search-service (FastAPI) | 8005 | search_db | tìm bài / người, hashtag thịnh hành, Alembic |
 
 `.env` cần thêm `NOTIFICATION_DB_PASSWORD`, `FEED_DB_PASSWORD`, `SEARCH_DB_PASSWORD`, `INTERNAL_API_KEY` (xem `.env.example`).
-Script tạo database chỉ chạy lần đầu, nên sau khi cập nhật phải chạy `docker compose down -v` rồi `docker compose up --build` và chạy lại seed.
+Script tạo database chỉ chạy lần đầu, nên sau khi cập nhật phải chạy `docker compose down -v` rồi `docker compose up --build`.
 
 ## Đổi model thì làm gì
 
@@ -173,7 +184,7 @@ auth-service/
   app/database.py   # kết nối DB, lớp Base cho model, dependency get_db
   app/main.py       # app FastAPI + /health
   app/models.py     # model SQLAlchemy theo ERD (bước 3)
-  app/seed.py       # dữ liệu mẫu (bước 3)
+  app/create_admin.py  # tạo tài khoản admin lần đầu
   app/security.py   # đọc JWT, get_current_user, require_admin (bước 4)
   app/errors.py     # định dạng lỗi chung
   app/routers/      # auth.py (chỉ Auth), admin.py (bước 5)

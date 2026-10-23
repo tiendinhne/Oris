@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.database import engine, get_db
 from app.errors import validation_error_handler
-from app.routers import admin, auth
+from app.routers import account, admin, auth, users
 
 
 @asynccontextmanager
@@ -20,6 +20,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Auth & User Service", lifespan=lifespan)
 app.add_exception_handler(RequestValidationError, validation_error_handler)
 app.include_router(auth.router)
+app.include_router(account.router)
+app.include_router(users.router)
 app.include_router(admin.router)
 
 

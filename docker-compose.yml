@@ -26,6 +26,12 @@ services:
       SERVICE_NAME: auth-service
       DATABASE_URL: postgresql+asyncpg://auth_user:${AUTH_DB_PASSWORD}@postgres:5432/auth_db
       JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      SMTP_HOST: ${SMTP_HOST:-}           # bỏ trống = không gửi mail thật, mã xác minh nằm trong log
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +40,7 @@ services:
     volumes:
       - ./auth-service:/app   # sửa code là tự nạp lại
     # tự chạy migration rồi mới khởi động service
-    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    command: sh -c "alembic upgrade head && python -m app.create_admin && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
   post-service:
     build: ./post-service
@@ -43,6 +49,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://post_user:${POST_DB_PASSWORD}@postgres:5432/post_db
       JWT_SECRET: ${JWT_SECRET}
       AUTH_SERVICE_URL: http://auth-service:8000
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,6 +80,9 @@ services:
     build: ./feed-service
     environment:
       DATABASE_URL: postgres://feed_user:${FEED_DB_PASSWORD}@postgres:5432/feed_db
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      POST_SERVICE_URL: http://post-service:8000
       TSC_WATCHFILE: DynamicPriorityPolling
     depends_on:
       postgres:
@@ -88,6 +98,9 @@ services:
     environment:
       SERVICE_NAME: search-service
       DATABASE_URL: postgresql+asyncpg://search_user:${SEARCH_DB_PASSWORD}@postgres:5432/search_db
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      POST_SERVICE_URL: http://post-service:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -97,16 +110,36 @@ services:
       - ./search-service:/app
     command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
+  user-web:
+    build: ./user-web
+    environment:
+      AUTH_URL: http://auth-service:8000   # Vite chuyển tiếp /api/<service>/... sang từng service
+      POST_URL: http://post-service:8000
+      NOTIFICATION_URL: http://notification-service:3000
+      FEED_URL: http://feed-service:3000
+      SEARCH_URL: http://search-service:8000
+    volumes:
+      - ./user-web:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - auth-service
+      - post-service
+      - notification-service
+      - feed-service
+      - search-service
+    ports:
+      - "5174:5174"
+
   admin-web:
-    image: node:20-alpine
-    working_dir: /app
+    build: ./admin-web
     environment:
       AUTH_URL: http://auth-service:8000   # Vite chuyển tiếp /api/auth/... sang đây
       POST_URL: http://post-service:8000
     volumes:
       - ./admin-web:/app
       - /app/node_modules                  # giữ node_modules trong container
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    command: npm run dev -- --host 0.0.0.0
     depends_on:
       - auth-service
       - post-service

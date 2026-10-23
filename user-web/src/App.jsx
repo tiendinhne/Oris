@@ -1,16 +1,25 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './auth'
 import Feed from './pages/Feed'
 import Login from './pages/Login'
 import PostDetail from './pages/PostDetail'
 import Register from './pages/Register'
+import Verify from './pages/Verify'
+
+function Private({ children }) {
+  const { me } = useAuth()
+  if (me === undefined) return <p className="muted center" style={{ marginTop: 80 }}>Đang tải…</p>
+  return me ? children : <Navigate to="/login" replace />
+}
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/" element={<Feed />} />
-      <Route path="/post/:id" element={<PostDetail />} />
+      <Route path="/verify" element={<Verify />} />
+      <Route path="/" element={<Private><Feed /></Private>} />
+      <Route path="/post/:id" element={<Private><PostDetail /></Private>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

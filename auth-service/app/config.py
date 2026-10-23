@@ -10,6 +10,16 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 15   # BR-AU2-04
     refresh_token_days: int = 7
+    notification_service_url: str = "http://notification-service:3000"
+    search_service_url: str = "http://search-service:8000"
+    # Gửi mail thật qua SMTP (ví dụ Gmail + mật khẩu ứng dụng). Bỏ trống smtp_host thì chỉ ghi log.
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""
+    feed_service_url: str = "http://feed-service:3000"
+    internal_api_key: str = ""
 
 
 settings = Settings()
