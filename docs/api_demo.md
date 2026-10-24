@@ -30,10 +30,11 @@ Mọi response mẫu trong tài liệu lấy từ **lần gọi thật** vào st
 | `replyId` | | id bài trả lời |
 | `caseId`, `caseId2` | | id nhóm báo cáo (Phần 2) |
 | `tokenC`, `notificationId` | | token của tài khoản C, id một thông báo (Phần 2) |
+| `tokenD`, `postIdD` | | token của tài khoản D, id bài D vừa đăng (Phần 2, bước 2.15; `postIdD` đổi sang bài kế tiếp sau mỗi lần xóa) |
 
 > Đổi `n` mỗi lần chạy (và sửa `username`, `username2` theo); **không dùng `830368`** — lần chạy lấy response mẫu đã tạo các tài khoản đó trong DB, dùng lại sẽ nhận `409 ALREADY_EXISTS` ngay ở bước 1.1.
 
-Cả 5 service cũng gọi được qua cổng của `user-web` (`http://localhost:5173/api/<service>/...`), nhưng kịch bản này gọi **thẳng vào từng cổng** cho đơn giản.
+Cả 5 service cũng gọi được qua cổng của `user-web` (`http://localhost:5174/api/<service>/...`), nhưng kịch bản này gọi **thẳng vào từng cổng** cho đơn giản.
 
 ### 0.2 Gắn token vào request
 
@@ -630,7 +631,7 @@ GET {{auth}}/users/{{username2}}/followers
 
 - **Auth:** Bearer `{{token}}`
 
-**Response 200 OK**
+**Response 200 OK** — `GET {{auth}}/users/{{username2}}/followers`
 
 ```json
 {
@@ -648,7 +649,7 @@ GET {{auth}}/users/{{username2}}/followers
 
 > Danh sách ngược lại: `GET {{auth}}/users/{{username}}/following`. Phân trang kiểu offset: gửi `?offset=<next_offset>`.
 
-**Response 200 OK**
+**Response 200 OK** — `GET {{auth}}/users/{{username}}/following`
 
 ```json
 {
@@ -1641,10 +1642,10 @@ GET {{auth}}/admin/audit-logs?days=1
 
 ### 2.15. Luật 3 vi phạm: tự động khóa
 
-Dùng một tài khoản riêng D: tạo như bước 1.1–1.2 (`email` = `apidemo.{{n}}d@example.com`, `username` = `apidemo_{{n}}d`), đăng nhập lấy `tokenD`. D đăng 3 bài bằng `POST {{post}}/posts` (ví dụ `{ "content": "Bài vi phạm số 1" }`, số 2, số 3) và lưu id từng bài. Sau đó admin xóa lần lượt từng bài:
+Dùng một tài khoản riêng D: tạo như bước 1.1–1.2 (`email` = `apidemo.{{n}}d@example.com`, `username` = `apidemo_{{n}}d`), đăng nhập lấy `tokenD`. D đăng 3 bài bằng `POST {{post}}/posts` (ví dụ `{ "content": "Bài vi phạm số 1" }`, số 2, số 3) và lưu id từng bài vào `postIdD` (mỗi lần đặt id của bài cần xóa). Sau đó admin xóa lần lượt từng bài:
 
 ```http
-DELETE {{post}}/admin/posts/{{id bài của D}}
+DELETE {{post}}/admin/posts/{{postIdD}}
 ```
 
 - **Auth:** Bearer `{{adminToken}}`

@@ -112,7 +112,7 @@ Tất cả đều yêu cầu **Đăng nhập**. Các route `/users/me...` đư�
 | DELETE | `/users/me` | Đăng nhập | body: `password` | Tắt tài khoản, thu hồi mọi phiên (204). Đăng nhập lại trong 30 ngày thì khôi phục. | BR-AU5-03 |
 | GET | `/users/me/blocks` | Đăng nhập | không | Danh sách người mình đã chặn (mảng thẻ người dùng). | |
 | GET | `/users/me/relations` | Đăng nhập | không | Id người mình chặn, người chặn mình, người mình theo dõi: `{blocked, blocked_by, following}`. | BR-GEN-05 |
-| POST | `/users/lookup` | Đăng nhập | body: `ids` (<= 200 UUID), `usernames` (<= 200) | Đổi id <-> username hàng loạt, trả mảng thẻ người dùng. Bỏ qua tài khoản chưa xác minh hoặc đã tắt. Post/Feed/Search gọi bằng token của người dùng. | |
+| POST | `/users/lookup` | Đăng nhập | body: `ids` (<= 200 UUID), `usernames` (<= 200) | Đổi id <-> username hàng loạt, trả mảng thẻ người dùng. Bỏ qua tài khoản chưa xác minh hoặc đã tắt. post-service gọi bằng token của người dùng. | |
 | GET | `/users/{username}` | Đăng nhập | path: `username` | Hồ sơ công khai kèm `followers_count`, `following_count`, `is_me`, `is_following`, `follows_me`. Không thấy hoặc bị chặn hai chiều: 404 `USER_NOT_FOUND`. | BR-GEN-05 |
 | POST | `/users/{username}/follow` | Đăng nhập | path: `username` | Theo dõi (204, gọi lặp không lỗi). Tự theo dõi: 400 `CANNOT_FOLLOW_SELF`. | |
 | DELETE | `/users/{username}/follow` | Đăng nhập | path: `username` | Bỏ theo dõi (204). | |

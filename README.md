@@ -95,8 +95,11 @@ Cần access token (trừ đăng ký, đăng nhập, xác minh, quên mật kh�
 **Các service phối hợp bằng sự kiện:** Auth và Post gọi `POST /internal/events` (khóa `X-Internal-Key` = `INTERNAL_API_KEY`) của Notification, Feed, Search
 (`app/notify.py` → `publish_event`). Gửi lỗi chỉ ghi log, không làm hỏng thao tác chính. Feed và Search lấy nội dung bài từ Post qua `POST /posts/batch`.
 
-**Giao diện người dùng** (`user-web/`, http://localhost:5174): đăng ký, xác minh email, đăng nhập, bảng tin Theo dõi / Khám phá, đăng bài, chi tiết bài, trả lời, thích, đăng lại.
-Chưa có màn hình hồ sơ, tìm kiếm, thông báo.
+**Giao diện người dùng** (`user-web/`, http://localhost:5174): đăng ký, xác minh email, đăng nhập, bảng tin Theo dõi / Khám phá, đăng bài, chi tiết bài, trả lời, thích, đăng lại,
+hồ sơ (xem, sửa hồ sơ, theo dõi, danh sách người theo dõi / đang theo dõi).
+Chưa có màn hình tìm kiếm, thông báo.
+
+Danh sách đầy đủ các API: [`docs/api_endpoint.md`](docs/api_endpoint.md); kịch bản test từng API trên Thunder Client: [`docs/api_demo.md`](docs/api_demo.md).
 
 ## Giao diện quản trị (bước 6)
 
