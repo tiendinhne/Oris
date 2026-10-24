@@ -181,3 +181,19 @@ button { cursor: pointer; }
 .dialog form { display: flex; flex-direction: column; gap: 18px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
 .linklike { border: 0; background: none; padding: 0; color: var(--primary); cursor: pointer; font: inherit; }
+
+/* ---------- Hồ sơ ---------- */
+.profile-head { display: flex; flex-direction: column; gap: 16px; padding: 24px; }
+.profile-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.profile-names { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.profile-names h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.profile-handle { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--ink-2); }
+.tag { padding: 2px 8px; border-radius: 999px; background: var(--line-soft); color: var(--ink-2); font-size: 12px; font-weight: 500; }
+.profile-bio { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+.profile-link { align-self: flex-start; font-weight: 500; overflow-wrap: anywhere; }
+.profile-stats { display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px; }
+.profile-stats a { color: var(--ink-2); text-decoration: none; }
+.profile-stats strong { color: var(--ink); }
+.profile-actions { display: flex; align-items: center; gap: 10px; }
+.profile-actions .btn { flex-grow: 1; height: 44px; border-radius: 12px; }
+.btn-block { width: 100%; }

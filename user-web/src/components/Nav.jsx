@@ -11,7 +11,7 @@ const items = [
   ['settings', '/settings', 'settings', 'Cài đặt'],
 ]
 
-// Mục chưa có màn hình trỏ về route dự kiến (tạm rơi về trang chủ).
+// Tìm kiếm, Thông báo, Cài đặt chưa có màn hình: route dự kiến tạm rơi về trang chủ.
 export default function Nav({ active = 'home' }) {
   const { me, unread, signOut } = useAuth()
   return (

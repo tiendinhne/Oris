@@ -10,6 +10,7 @@ export default function Post({ post: initial, repostedBy, linkReplies = true }) 
   const [p, setP] = useState(initial)
   const [busy, setBusy] = useState(false)
   const name = p.author.display_name || 'Người dùng'
+  const profilePath = p.author.username ? `/u/${p.author.username}` : null
 
   // Gọi API rồi lấy lại số đếm thật từ server (tránh lệch khi bấm nhanh)
   async function toggle(fn, on) {
@@ -25,10 +26,12 @@ export default function Post({ post: initial, repostedBy, linkReplies = true }) 
     <article className="card post">
       {repostedBy && <div className="post-repost"><Icon name="repost" size={15} />{repostedBy} đã đăng lại</div>}
       <div className="post-row">
-        <Link to="/" aria-label={`Hồ sơ của ${name}`} style={{ textDecoration: 'none' }}><Avatar name={name} /></Link>
+        {profilePath
+          ? <Link to={profilePath} aria-label={`Hồ sơ của ${name}`} style={{ textDecoration: 'none' }}><Avatar name={name} /></Link>
+          : <Avatar name={name} />}
         <div className="post-body">
           <div className="post-head">
-            <Link to="/" className="post-name">{name}</Link>
+            {profilePath ? <Link to={profilePath} className="post-name">{name}</Link> : <span className="post-name">{name}</span>}
             {p.author.username && <span className="muted small">@{p.author.username}</span>}
             <span className="post-time muted small">{timeAgo(p.created_at)}{p.edited_at && ' (đã chỉnh sửa)'}</span>
           </div>
