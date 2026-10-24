@@ -77,6 +77,20 @@ describe('Profile', () => {
     expect(screen.queryByRole('link', { name: /example\.com/ })).not.toBeInTheDocument()
   })
 
+  it('không hiển thị liên kết có scheme nguy hiểm như javascript:', async () => {
+    userApi.profile.mockResolvedValue(profileOf({ link_url: 'javascript:alert(1)' }))
+    setup()
+    const head = within((await screen.findByRole('heading', { level: 1, name: 'Minh Anh' })).closest('section'))
+    expect(head.queryByRole('link', { name: /alert/ })).not.toBeInTheDocument()
+    expect(head.getAllByRole('link').every((a) => !/^javascript:/i.test(a.getAttribute('href')))).toBe(true)
+  })
+
+  it('vẫn hiển thị liên kết https', async () => {
+    userApi.profile.mockResolvedValue(profileOf({ link_url: 'HTTPS://example.com/a' }))
+    setup()
+    expect(await screen.findByRole('link', { name: /example\.com\/a/ })).toHaveAttribute('href', 'HTTPS://example.com/a')
+  })
+
   it('hồ sơ của mình có nút Chỉnh sửa hồ sơ và không có nút theo dõi', async () => {
     setup()
     expect(await screen.findByRole('button', { name: 'Chỉnh sửa hồ sơ' })).toBeInTheDocument()

@@ -7,7 +7,8 @@ import FollowButton from '../components/FollowButton'
 import Post from '../components/Post'
 import Shell from '../components/Shell'
 
-const fmt = (n) => n.toLocaleString('vi-VN')
+const SAFE_LINK = /^https?:\/\//i
+const fmt =(n) => n.toLocaleString('vi-VN')
 
 function joinedLabel(iso) {
   const d = new Date(iso)
@@ -108,7 +109,8 @@ export default function Profile() {
             <Avatar name={profile.display_name} size={72} />
           </div>
           {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-          {profile.link_url && (
+          {/* Chỉ http(s): backend không kiểm scheme, javascript: trong href sẽ chạy script khi bấm */}
+          {SAFE_LINK.test(profile.link_url || '') && (
             <a className="profile-link" href={profile.link_url} target="_blank" rel="noopener noreferrer">
               {profile.link_url.replace(/^https?:\/\//, '')}
             </a>
