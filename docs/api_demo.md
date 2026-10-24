@@ -18,9 +18,9 @@ Mọi response mẫu trong tài liệu lấy từ **lần gọi thật** vào st
 | `noti` | `http://localhost:8003` | notification-service |
 | `feed` | `http://localhost:8004` | feed-service |
 | `search` | `http://localhost:8005` | search-service |
-| `n` | một số tự chọn, ví dụ `830368` | hậu tố cho email/username demo; **đổi mỗi lần chạy lại** vì username và email phải duy nhất |
-| `username` | `apidemo_830368` | username tài khoản A (thay số bằng `n` của bạn) |
-| `username2` | `apidemo_830368b` | username tài khoản B |
+| `n` | `1001` (ví dụ) | hậu tố cho email/username demo; **đổi mỗi lần chạy lại** vì username và email phải duy nhất |
+| `username` | `apidemo_1001` | username tài khoản A (luôn là `apidemo_` + `n`) |
+| `username2` | `apidemo_1001b` | username tài khoản B (`apidemo_` + `n` + `b`) |
 | `token` | | access token của A |
 | `token2` | | access token của B |
 | `adminToken` | | access token của admin |
@@ -30,6 +30,8 @@ Mọi response mẫu trong tài liệu lấy từ **lần gọi thật** vào st
 | `replyId` | | id bài trả lời |
 | `caseId`, `caseId2` | | id nhóm báo cáo (Phần 2) |
 | `tokenC`, `notificationId` | | token của tài khoản C, id một thông báo (Phần 2) |
+
+> Đổi `n` mỗi lần chạy (và sửa `username`, `username2` theo); **không dùng `830368`** — lần chạy lấy response mẫu đã tạo các tài khoản đó trong DB, dùng lại sẽ nhận `409 ALREADY_EXISTS` ngay ở bước 1.1.
 
 Cả 5 service cũng gọi được qua cổng của `user-web` (`http://localhost:5173/api/<service>/...`), nhưng kịch bản này gọi **thẳng vào từng cổng** cho đơn giản.
 
@@ -49,7 +51,7 @@ Cách dự phòng nếu Tests tab không chạy: gửi request, copy giá trị 
 
 ### 0.4 Tài khoản và dữ liệu dùng trong kịch bản
 
-- Tài khoản demo tự tạo: email `apidemo.{{n}}@example.com`, username `apidemo_{{n}}` (A); thêm hậu tố `b` cho B, `c`, `d` cho Phần 2. Mật khẩu `Demo1234`. Trong các response mẫu, `{{n}}` = `830368`.
+- Tài khoản demo tự tạo: email `apidemo.{{n}}@example.com`, username `apidemo_{{n}}` (A); thêm hậu tố `b` cho B, `c`, `d` cho Phần 2. Mật khẩu `Demo1234`. Các response mẫu bên dưới là **kết quả của một lần chạy thật với `n` = `830368`** (chỉ để tham khảo, đừng gõ lại số này); khi bạn chạy, tên và id trong response sẽ khác.
 - **OTP xác minh email luôn là `1234`** (mã giả, cấu hình tạm thời để demo).
 - Admin: `admin@example.com` / `Admin@1234`.
 - Các tài khoản có sẵn `minhanh.ng`, `thuha.le` chỉ dùng để **đọc** (tìm kiếm, hashtag); đừng khóa hay tắt chúng.
