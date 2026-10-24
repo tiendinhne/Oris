@@ -43,7 +43,7 @@ export default function Verify() {
   return (
     <AuthSplit title="Xác minh email">
       <form onSubmit={submit} noValidate>
-        <p className="muted">Nhập mã 6 số đã gửi tới <b>{email}</b>. Mã có hiệu lực 10 phút.</p>
+        <p className="muted">Nhập mã xác minh đã gửi tới <b>{email}</b>. Mã có hiệu lực 10 phút.</p>
         <div className="field">
           <label htmlFor="code">Mã xác minh</label>
           <input id="code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code}
@@ -51,7 +51,7 @@ export default function Verify() {
         </div>
         {error && <p role="alert" className="alert-error">{error}</p>}
         {info && <p className="hint ok">{info}</p>}
-        <button type="submit" className="btn btn-primary btn-xl" disabled={busy || code.length !== 6}>
+        <button type="submit" className="btn btn-primary btn-xl" disabled={busy || code.length < 4}>{/* 4 số khi dùng MOCK_OTP, mã thật 6 số */}
           {busy ? 'Đang xác minh…' : 'Xác minh'}
         </button>
         <p className="auth-alt">Chưa nhận được mã? <button type="button" className="linklike" onClick={resend}><b>Gửi lại</b></button></p>

@@ -11,6 +11,7 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.database import get_db
 from app.errors import api_error
 from app.models import EmailOtp, PasswordResetToken, RefreshToken, User, UserStatus
@@ -70,7 +71,7 @@ class EmailRequest(BaseModel):
 
 class VerifyEmailRequest(BaseModel):
     email: str
-    code: str = Field(min_length=6, max_length=6)
+    code: str = Field(min_length=4, max_length=6)  # 4 số khi dùng MOCK_OTP=1234, mã thật 6 số
 
 
 class ResetPasswordRequest(BaseModel):
@@ -81,7 +82,7 @@ class ResetPasswordRequest(BaseModel):
 
 
 async def _send_otp(db: AsyncSession, user: User) -> None:
-    code = f"{secrets.randbelow(10**6):06d}"
+    code = settings.mock_otp or f"{secrets.randbelow(10**6):06d}"  # TODO: bỏ MOCK_OTP trước khi chạy thật
     db.add(EmailOtp(user_id=user.id, code_hash=_sha(code), expires_at=_now() + OTP_TTL))
     send_email(user.email, "Mã xác minh Oris", f"Mã của bạn là {code}, hiệu lực 10 phút.")
 

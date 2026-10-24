@@ -27,6 +27,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://auth_user:${AUTH_DB_PASSWORD}@postgres:5432/auth_db
       JWT_SECRET: ${JWT_SECRET}
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      MOCK_OTP: ${MOCK_OTP-1234}          # TẠM THỜI: mọi mã OTP là 1234. Đặt MOCK_OTP= (trống) trong .env để sinh mã thật
       SMTP_HOST: ${SMTP_HOST:-}           # bỏ trống = không gửi mail thật, mã xác minh nằm trong log
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USER: ${SMTP_USER:-}

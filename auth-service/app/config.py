@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     smtp_from: str = ""
     feed_service_url: str = "http://feed-service:3000"
     internal_api_key: str = ""
+    # TẠM THỜI: có giá trị thì mọi mã OTP đều là mã này (demo khỏi xem log). Bỏ trống = sinh mã 6 số ngẫu nhiên.
+    mock_otp: str = ""
 
 
 settings = Settings()

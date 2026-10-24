@@ -18,8 +18,9 @@ Bảng được tạo tự động khi service khởi động (`alembic upgrade 
 `admin@example.com` / `Admin@1234`, tự tạo khi Auth khởi động (chạy lại không tạo trùng).
 Đổi bằng biến `ADMIN_EMAIL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD` trong `docker-compose.yml`.
 
-Người dùng thường tự đăng ký qua `POST /auth/register`. Email chưa gửi thật nên mã OTP và liên kết đặt lại mật khẩu
-nằm trong log: `docker compose logs auth-service` (tìm dòng `[EMAIL -> ...]`).
+Người dùng thường tự đăng ký qua `POST /auth/register`. **Mã OTP xác minh email tạm thời luôn là `1234`**
+(biến `MOCK_OTP` trong `docker-compose.yml`). Liên kết đặt lại mật khẩu vẫn nằm trong log khi chưa cấu hình SMTP:
+`docker compose logs auth-service` (tìm dòng `[EMAIL -> ...]`).
 Dữ liệu nằm trong volume `pgdata`, chỉ mất khi chạy `docker compose down -v`.
 
 ## Đăng nhập và phân quyền admin (bước 4)
@@ -164,6 +165,12 @@ Chứng minh mỗi service chỉ vào được database của mình:
 docker compose exec postgres psql -U auth_user -d post_db
 # → FATAL: permission denied for database "post_db"
 ```
+
+## Việc để làm sau
+
+- [ ] **Bỏ OTP giả `1234`:** xóa `MOCK_OTP` khỏi `docker-compose.yml` và `auth-service/app/config.py`, trả `code` trong
+  `VerifyEmailRequest` (`auth-service/app/routers/account.py`) về đúng 6 ký tự, màn `user-web/src/pages/Verify.jsx`
+  về chờ đủ 6 số. Cấu hình SMTP để mã gửi qua email thật.
 
 ## Lưu ý
 
