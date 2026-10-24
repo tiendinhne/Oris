@@ -29,6 +29,11 @@ export function AuthProvider({ children }) {
     setMe(await authApi.me())
   }
 
+  // Làm mới thông tin tài khoản sau khi sửa hồ sơ (tên, avatar trên thanh điều hướng)
+  async function reloadMe() {
+    setMe(await authApi.me())
+  }
+
   async function signOut() {
     const t = tokens.get()
     tokens.clear()
@@ -36,5 +41,5 @@ export function AuthProvider({ children }) {
     if (t?.refresh_token) authApi.logout(t.refresh_token).catch(() => {})
   }
 
-  return <Ctx.Provider value={{ me, unread, signIn, signOut }}>{children}</Ctx.Provider>
+  return <Ctx.Provider value={{ me, unread, signIn, signOut, reloadMe }}>{children}</Ctx.Provider>
 }
