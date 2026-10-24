@@ -76,6 +76,13 @@ const qs = (params = {}) => {
 }
 const post = (path, body) => api(path, { method: 'POST', body: body ?? {} })
 
+// Lỗi theo trường: 409 trả object {trường: thông_báo}, 422 trả mảng [{field, message}].
+export const fieldErrors = (err) => {
+  const f = err?.detail?.fields
+  if (Array.isArray(f)) return Object.fromEntries(f.map((x) => [x.field, x.message]))
+  return f && typeof f === 'object' ? { ...f } : {}
+}
+
 export const authApi = {
   login: (email, password) => raw('/api/auth/auth/login', { method: 'POST', body: { email, password } }),
   logout: (refresh_token) => raw('/api/auth/auth/logout', { method: 'POST', body: { refresh_token } }),
@@ -85,6 +92,15 @@ export const authApi = {
   me: () => api('/api/auth/auth/me'),
 }
 
+export const userApi = {
+  profile: (username) => api(`/api/auth/users/${encodeURIComponent(username)}`),
+  update: (body) => api('/api/auth/users/me', { method: 'PATCH', body }),
+  follow: (username, on) => api(`/api/auth/users/${encodeURIComponent(username)}/follow`, { method: on ? 'POST' : 'DELETE' }),
+  followers: (username, p) => api(`/api/auth/users/${encodeURIComponent(username)}/followers${qs(p)}`),
+  following: (username, p) => api(`/api/auth/users/${encodeURIComponent(username)}/following${qs(p)}`),
+  relations: () => api('/api/auth/users/me/relations'),
+}
+
 export const postApi = {
   create: (body) => post('/api/post/posts', body),
   get: (id) => api(`/api/post/posts/${id}`),
@@ -92,6 +108,7 @@ export const postApi = {
   reply: (id, body) => post(`/api/post/posts/${id}/replies`, body),
   like: (id, on) => api(`/api/post/posts/${id}/like`, { method: on ? 'POST' : 'DELETE' }),
   repost: (id, on) => api(`/api/post/posts/${id}/repost`, { method: on ? 'POST' : 'DELETE' }),
+  byUser: (username, p) => api(`/api/post/posts/by-user/${encodeURIComponent(username)}${qs(p)}`),
 }
 
 export const feedApi = {

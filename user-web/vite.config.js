@@ -10,6 +10,7 @@ const route = (name, port) => ({
 
 export default defineConfig({
   plugins: [react()],
+  test: { environment: 'jsdom', setupFiles: './src/test/setup.js' },
   server: {
     port: 5174,
     watch: { usePolling: true }, // usePolling: Docker trên Windows không báo sự kiện đổi file
