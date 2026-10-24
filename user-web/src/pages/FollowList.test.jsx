@@ -159,6 +159,17 @@ describe('FollowList', () => {
     expect(await row.findByRole('button', { name: 'Theo dõi' })).toBeInTheDocument()
   })
 
+  it('theo dõi lại từ tab Người theo dõi của mình tăng số trên tab Đang theo dõi thêm 1', async () => {
+    userApi.follow.mockResolvedValue(null)
+    setup('/u/minhanh/followers')
+    const row = within(await rowOf('Bùi Đức Thịnh'))
+    const tab = screen.getByRole('link', { name: /Đang theo dõi/ })
+    await waitFor(() => expect(tab).toHaveTextContent('312'))
+    await userEvent.click(await row.findByRole('button', { name: 'Theo dõi lại' }))
+    await waitFor(() => expect(tab).toHaveTextContent('313'))
+    expect(screen.getByRole('link', { name: /Người theo dõi/ })).toHaveTextContent((1204).toLocaleString('vi-VN'))
+  })
+
   it('theo dõi trên danh sách của người khác không đổi số trên tab', async () => {
     userApi.profile.mockResolvedValue(profileOf({ id: 'u9', username: 'khac', display_name: 'Khác' }))
     userApi.follow.mockResolvedValue(null)

@@ -89,8 +89,8 @@ export default function FollowList() {
       if (nowFollowing) copy.add(id); else copy.delete(id)
       return copy
     })
-    // Danh sách "Đang theo dõi" của chính mình: số trên tab phải khớp ngay, không cần tải lại hồ sơ
-    if (isOwner && list === 'following') {
+    // Danh sách của chính mình (cả hai tab): theo dõi/bỏ theo dõi đổi số "Đang theo dõi" ngay, không cần tải lại hồ sơ
+    if (isOwner) {
       setProfile((p) => (p ? { ...p, following_count: p.following_count + (nowFollowing ? 1 : -1) } : p))
     }
   }
