@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './auth'
 import Feed from './pages/Feed'
+import FollowList from './pages/FollowList'
 import Login from './pages/Login'
 import PostDetail from './pages/PostDetail'
 import Profile from './pages/Profile'
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/post/:id" element={<Private><PostDetail /></Private>} />
       <Route path="/profile" element={<Private><MyProfile /></Private>} />
       <Route path="/u/:username" element={<Private><Profile /></Private>} />
+      <Route path="/u/:username/:list" element={<Private><FollowList /></Private>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
