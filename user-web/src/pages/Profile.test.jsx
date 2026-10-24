@@ -189,6 +189,26 @@ describe('Profile', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it('đổi sang người khác khi bài viết còn đang tải thì không lóe "Chưa có bài viết."', async () => {
+    postApi.byUser.mockImplementation((u) => (u === 'b'
+      ? new Promise(() => {}) // bài của b chưa về
+      : Promise.resolve({ items: [postOf('p1', 'Bài đầu tiên')], next_cursor: null })))
+    setup()
+    await screen.findByText('Bài đầu tiên')
+    // Ghi lại mọi nút DOM được thêm vào: khung hình trung gian sau khi đổi người sẽ bị bắt ở đây
+    const added = []
+    const observer = new MutationObserver((records) => {
+      records.forEach((r) => r.addedNodes.forEach((n) => added.push(n.textContent)))
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+    await userEvent.click(screen.getByRole('link', { name: 'sang b' }))
+    await waitFor(() => expect(postApi.byUser).toHaveBeenCalledWith('b', { replies: false, cursor: undefined }))
+    added.push(...observer.takeRecords().flatMap((r) => [...r.addedNodes].map((n) => n.textContent)))
+    observer.disconnect()
+    expect(screen.queryByText('Chưa có bài viết.')).not.toBeInTheDocument()
+    expect(added).not.toContain('Chưa có bài viết.')
+  })
+
   it('bỏ qua phản hồi cũ khi username trên URL đổi nhanh', async () => {
     let resolveA
     userApi.profile.mockImplementation((u) => (u === 'a'

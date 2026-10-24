@@ -32,6 +32,7 @@ export default function Profile() {
   if (shownUser !== username) {
     setShownUser(username)
     setProfile(null); setError(null); setTab('posts'); setItems([]); setNext(null); setPostsError(''); setEditing(false)
+    setLoading(true) // bài của người mới chưa về: không được lóe "Chưa có bài viết."
   }
 
   const currentUser = useRef(username)

@@ -201,7 +201,7 @@ button { cursor: pointer; }
 /* ---------- Danh sách theo dõi ---------- */
 .follow-names { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
 .follow-names h1 { margin: 0; font-size: 20px; font-weight: 600; overflow-wrap: anywhere; }
-.tabs a .tab-count { margin-left: 6px; font-weight: 500; }
+.tabs a .tab-count { font-weight: 500; }
 .follow-list { list-style: none; margin: 0; padding: 4px 20px; }
 .follow-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line-soft); }
 .follow-row:first-child { border-top: 0; }
