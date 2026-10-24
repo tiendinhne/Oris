@@ -1,4 +1,29 @@
+# Biến môi trường thật (chứa mật khẩu) – chỉ commit .env.example
 .env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
 *.pyc
 .venv/
+venv/
+.pytest_cache/
+
+# Node / NestJS / Vite: cài lại bằng npm install, dist tự build khi service khởi động
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Log
+*.log
+npm-debug.log*
+
+# Editor / hệ điều hành
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Cài đặt Claude Code riêng của từng máy
+.claude/settings.local.json
